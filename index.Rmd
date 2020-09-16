@@ -1,5 +1,3 @@
 ---
 title: "HCS7004"
 ---
-
-Click on "Lab 3" above.
