@@ -1,7 +1,7 @@
-name: "HSC7004_Lab3"
+name: "HSC7004"
 output_dir: docs
 navbar:
-  title: "Lab 3"
+  title: "HCS7004"
   left:
     - text: "Home"
       href: index.html
