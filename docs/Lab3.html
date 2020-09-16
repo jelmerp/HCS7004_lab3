@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>HCS7004 - Lab 3</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Lab 3</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Lab3.html">Lab 3</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><div class="line-block">HCS7004 - Lab 3:<br />
+Software installation and containers</div></h1>
+
+</div>
+
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p><br/></p>
+<hr />
+<p><br/></p>
+<p>To get started, we’ll create and move into a directory for this lab:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir lab3_containers</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd lab3_containers</span></code></pre></div>
+<p><br/></p>
+<div id="the-path-environment-variable" class="section level1">
+<h1><span class="header-section-number">1</span> The <code>$PATH</code> environment variable</h1>
+<p>The <code>$PATH</code> environment variables holds all the directories from which executables can be called directly, that is, without specifying the full path to the executable. Let’s see which directories are in our <code>$PATH</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$PATH</span>                          <span class="co"># The output is a little hard to read...</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$PATH</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&quot;:&quot;</span> <span class="st">&quot;\n&quot;</span> <span class="kw">|</span> <span class="fu">nl</span>       <span class="co"># That&#39;s better!</span></span></code></pre></div>
+<p><br/></p>
+<p>Do you remember how we can add a directory to <code>$PATH</code>? Let’s say we want to add our newly created dir <code>lab3_containers</code>.</p>
+<details>
+<p><summary>Show answer</summary></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ PATH=<span class="va">$PATH</span>:<span class="va">$HOME</span>/lab3_containers/</span></code></pre></div>
+Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</code>, because it will work for any of you regardless of your user name. <code>$HOME</code> is another environment variable; as is your user name <code>$USER</code> – so we could have also entered <code>/home/$USER</code> regardless of the actual user name.
+</details>
+<p><br/></p>
+<p>To permanently add a directory to <code>$PATH</code>, add it to your <code>~/.bashrc</code> file. How could we do this in a single line on the command line?</p>
+<details>
+<p><summary>Show answer</summary></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:/path/to/dir/lab3_containers/&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+</details>
+<p><br/></p>
+<p>With the <code>which</code> command (or <code>whereis</code> for similar results), we can check where software that is available to the <code>$PATH</code> is located, since we can have many directories in it. Even commands like <code>grep</code> have executables, and they can simply be called by their name because these executables are in dirs in your <code>$PATH</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ which grep</span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="use-of-apt-get" class="section level1">
+<h1><span class="header-section-number">2</span> Use of <code>apt-get</code></h1>
+<p>For software installation on an Ubuntu operating system, such as the one in your virtual box, <code>apt-get</code> is your go-to command. When you install software (“packages”) this way, the software will be available in your <code>$PATH</code>, dependencies will be automatically handled, and you will be prompted whenever software updates become available to the package manager.</p>
+<p>Recall that we’ll need admin privileges to use <code>apt-get</code>, and will therefore prepend our commands with <code>sudo</code>. This way, we execute the commands with admin rights/privileges (“<code>sudo</code> privileges”). When you execute the first command with <code>sudo</code> below, you’ll be prompted for your personal password (and whenever you use <code>sudo</code> again within the next 15 minutes, you won’t be prompted).</p>
+<p>Some bioinformatics tools, such as <code>samtools</code>, are available through <code>apt-get</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ samtools                        <span class="co"># This should not work: samtools is not installed</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ apt-get update                  <span class="co"># Nope!</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo apt-get update             <span class="co"># First, update the package manager index</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo apt-get install samtools   <span class="co"># Then install samtools (answer &quot;Y&quot; when prompted)</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="ex">hcs7004@ubuntu</span>:~$ samtools                        <span class="co"># Now, samtools is installed &amp; available in $PATH</span></span></code></pre></div>
+<p><br/></p>
+<p>Today, we will be working with the container software <strong><code>Singularity</code></strong>, which is <em>not</em> available through <code>apt-get</code>. Therefore, we will first need to install its dependencies, some with <code>apt-get</code> and others manually, and <em>then</em> we install Singularity manually.</p>
+<p>We start with installing a few of the Singularity dependencies with <code>apt-get</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo apt-get install -y build-essential libssl-dev uuid-dev wget</span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="installing-singularity" class="section level1">
+<h1><span class="header-section-number">3</span> Installing <code>Singularity</code></h1>
+<p>Since the installation of Singularity involves relatively many steps, we’ll use the shell script <code>installing_singularity.sh</code>. Like any shell script, it is simply a collection of shell commands. In other words, you could also enter these commands one-by-one on the command line. These commands were taken from the <a href="https://sylabs.io/guides/3.5/user-guide/quick_start.html#quick-installation-steps">Singularity installation instructions</a>, so there is no magic here.</p>
+<p><br/></p>
+<p>We download the script with installation instructions:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ wget http://bit.ly/HCS7004 -O installing_singularity.sh</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ chmod u+x installing_singularity.sh     <span class="co"># This will make the script executable</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls                                      <span class="co"># Note the change in color!</span></span></code></pre></div>
+<p><br/></p>
+<p>Have a look at the script to get an idea of what’s being done there. How do we do that again?</p>
+<details>
+<p><summary>Show answer</summary></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ less installing_singularity.sh</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ head installing_singularity.sh        <span class="co"># We could also take a look at the first few lines</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat installing_singularity.sh         <span class="co"># Or print the entire file to the screen (not always ideal)</span></span></code></pre></div>
+</details>
+<p><br/></p>
+<ul>
+<li>What do you think the first line of the script does?</li>
+<li>Please identify at least one line in the script that you would like to understand better.</li>
+</ul>
+<p><br/></p>
+<p>Now, we’ll run the script:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ ./installing_singularity.sh</span></code></pre></div>
+<p>(If you get errors, try to figure out at which line those occurred. We’ll try to rerun line-by-line from there onwards, in that case.)</p>
+<p><br/></p>
+<p>Let’s check whether <code>Singularity</code> was successfully installed:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity</span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="our-options-to-run-multiqc" class="section level1">
+<h1><span class="header-section-number">4</span> Our options to run <code>multiqc</code></h1>
+<p><code>multiqc</code> is an extremely useful program for summarizing quality control (“QC”) results for multiple samples. Unfortunately, it’s not available at OSC. (How could we check this?)</p>
+<p><br/></p>
+<p>Now, our main options are:</p>
+<ol style="list-style-type: decimal">
+<li>Install it manually</li>
+<li>Use <code>conda</code></li>
+<li>Use a container</li>
+</ol>
+<p>What are some pros and cons of these different options?</p>
+<p><br/></p>
+<p>We’ll now look for <code>multiqc</code> at the <a href="https://biocontainers.pro">Biocontainers website</a>. Click on “<em>Registry</em>” in the top bar, then enter “<em>multiqc</em>” in the search box. Do you get any hits?</p>
+<p>The <a href="https://biocontainers.pro/#/tools/multiqc">tool page</a> that you should have found gives lots of details, including installation instructions with <code>conda</code>, <code>Docker</code>, and <code>Singularity</code>. It’s perhaps a bit confusing that this website also gives <code>conda</code> options, since that’s not technically a container platform, but it’s still handy.</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="downloading-and-running-a-multiqc-container" class="section level1">
+<h1><span class="header-section-number">5</span> Downloading and running a <code>multiqc</code> container</h1>
+<p>At <a href="https://biocontainers.pro/#/tools/multiqc">multiqc’s Biocontainers page</a>, we find the following instructions for Singularity, which will download and run the container:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="ex">Singularity</span><span class="op">&gt;</span></span></code></pre></div>
+<p>Apparently, the default run script was to enter a shell (i.e. a terminal) within the container, as indicated with the <code>Singularity&gt;</code> prompt. You should also see this prompt yourself, and it indicates that your are inside the container.</p>
+<p><br/></p>
+<p>How could we check whether <code>multiqc</code> is installed?</p>
+<details>
+<p><summary>Show answer</summary></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc</span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --help</span></code></pre></div>
+</details>
+<p><br/></p>
+<p>In most cases, it would be a bit more practical to first just download the container image using <code>singularity pull &lt;image-ID&gt;</code>. (Another side note is that the “address” to the container provided here is not the canonical form, I’m not sure why Biocontainers does this. The same container is also hosted at <a href="https://quay.io/">quay.io</a>, from which it can be downloaded using <code>singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1</code>.)</p>
+<p><br/></p>
+<p>Which version of <code>multiqc</code> did we just download? Which other versions are available? How would we download one of those?</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="building-our-own-container" class="section level1">
+<h1><span class="header-section-number">6</span> Building our own container</h1>
+<p>To practice, we’ll now build our own <code>Singularity</code> container with <code>multiqc.</code> Recall that you need <code>sudo</code> privileges to build a container, so we’ll do this on our own computer/Virtualbox.</p>
+<p><br/></p>
+<p>First, create a directory for the container (within the <code>lab3_containers/</code> dir):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir multiqc</span></code></pre></div>
+<p><br/></p>
+<p>We will now create a special type of container image that allows for interactive modification using the <code>--sandbox</code> option, with <code>multiqc/</code> being the target directory (which will be created) and <code>docker://ubuntu:20.04</code> being the base image.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build --sandbox multiqc/ docker://ubuntu:20.04</span></code></pre></div>
+<p>Once the build is complete, we have created a container with an Ubuntu OS, and can simply open a shell in it with the <code>singularity shell</code> sub-command. How did this compare to installing an Ubuntu Virtual Machine?</p>
+<p><br/></p>
+<p>Now, when we ussue the <code>singularity shell</code> command, we will also use the <code>--writable</code> option: that way, the container image will be modified by what you do in the container (as opposed to regular usage of a container, in which it is used as a <em>static</em> computing environment):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity shell --writable multiqc/</span></code></pre></div>
+<p>(You’ll get a few warnings, which can be ignored.) <br/> <br/></p>
+<p>Now, we have entered the container: the commands below should be entered inside the container, as again indicated by the <code>Singularity&gt;</code> prompt. We’ll first update the package manager index and install two dependencies for <code>multiqc.</code> Note that we don’t need <code>sudo</code> for the <code>apt-get</code> commands: because we entered the container with <code>sudo</code> privileges, those <em>carried over</em> into the container.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> apt-get update</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="ex">Singularity</span><span class="op">&gt;</span> apt-get install -y python3-pip git     <span class="co"># This will take a while</span></span></code></pre></div>
+<p><br/></p>
+<p>Now, we’ll install <code>multiqc</code> using the Python package manager <code>pip</code> (which we just installed above):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> pip3 install git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
+<p><br/></p>
+<p>Let’s test whether that worked:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc -h</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --version</span></code></pre></div>
+<p><br/></p>
+<p>We’ll exit the container:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> exit</span></code></pre></div>
+<p><br/></p>
+<p>Now, from our special sandbox container, we’ll build a regular container image file. We’ll later transfer this image file to OSC to run <code>multiqc</code> there. (We could also upload our image to a personal, public repository so that others can use our container, too.)</p>
+<p>Note that we use the <code>build</code> sub-command again, but now without the <code>--sandbox</code> option. As arguments, we give the target image file <code>multiqc.sif</code> (with <code>.sif</code> being the standard extension for <code>Singularity</code> container image files) and the existing sandbox directory <code>multiqc/</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc.sif multiqc/</span></code></pre></div>
+<p><br/></p>
+<p>Excellent, we have created a container image!</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="running-our-container-at-osc" class="section level1">
+<h1><span class="header-section-number">7</span> Running our container at OSC</h1>
+<p>We’ll upload our container image to OSC using <code>sftp</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sftp <span class="op">&lt;</span>username<span class="op">&gt;</span>@sftp.osc.edu  <span class="co"># Replace &quot;&lt;username&gt;&quot; by your actual OSC user name</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="ex">sftp</span><span class="op">&gt;</span> mkdir /fs/scratch/PAS1752/<span class="op">&lt;</span>username<span class="op">&gt;</span>/lab3_containers/ <span class="co"># Note: we can use regular shell commands</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="ex">sftp</span><span class="op">&gt;</span> put multiqc.sif /fs/scratch/PAS1752/<span class="op">&lt;</span>username<span class="op">&gt;</span>/lab3_containers/</span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="ex">sftp</span><span class="op">&gt;</span> exit</span></code></pre></div>
+<p><br/></p>
+<p>Now, let’s move to OSC. You can either <code>ssh</code> in (<code>ssh &lt;username&gt;@owens.osc.edu</code>), or open a terminal in <a href="http://ondemand.osc.edu/">OnDemand</a>. Then, go the directory that you uploaded the container image file to:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ cd /fs/scratch/PAS1752/<span class="op">&lt;</span>username<span class="op">&gt;</span>/lab3_containers/</span>
+<span id="cb23-2"><a href="#cb23-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls <span class="co"># You should see you container &quot;multiqc.sif&quot;</span></span></code></pre></div>
+<p><br/></p>
+<p><code>Singularity</code> is installed at OSC, but it does need to be loaded first:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load singularity</span></code></pre></div>
+<p><br/></p>
+<p>Now, we’ll run <code>multiqc</code> from our container. We do this using another <code>singularity</code> sub-command: <code>exec</code> (short for “<em>execute</em>”).</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity exec multiqc.sif multiqc -h</span>
+<span id="cb25-2"><a href="#cb25-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity exec multiqc.sif multiqc --version</span></code></pre></div>
+<p><br/></p>
+<p>With <code>singularity exec</code>, we executed a shell command inside the container and immediately exited. Recall that running software this way is almost the same as running locally installed software:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1"></a>$ <span class="ex">multiqc</span> -h                        <span class="co"># This is what you would do if you had multiqc installed locally</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a>$ <span class="ex">singularity</span> exec multiqc.sif <span class="dt">\ </span>   <span class="co"># “Containerized” execution.</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>     <span class="ex">multiqc</span> -h                     </span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="file-sharing-with-containers" class="section level1">
+<h1><span class="header-section-number">8</span> File sharing with containers</h1>
+<p>So far, all we did with <code>multiqc</code> was run its help function. What if we wanted it to analyze actual data have output returned by the program – how would that work with a container?</p>
+<p>An important aspect of dealing with containers is the sharing of files between host and container. With Singularity (but not Docker), several directories are “<em>bind-mounted</em>” (attached/connected) between the host and container <em>by default</em>:</p>
+<ul>
+<li><code>$HOME</code> (<code>/home/$USER</code>): your home directory</li>
+<li><code>$PWD</code>: your current working directory</li>
+<li><code>/tmp</code> <br/></li>
+</ul>
+<p>Moreover, when you enter a container (e.g. via <code>singularity shell</code>) or execute a command directly (via <code>singularity exec</code>), you will be located at your host’s current working directory within the container, too. And since the current working directory is bind-mounted by default, this means that files written to the current directory in the container, will also be (and remain) present in the host.</p>
+<p>Confusing? Let’s look at this in practice:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ pwd         <span class="co"># Let&#39;s check our current dir at OSC (the host)</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls          <span class="co"># And let&#39;s list our files there</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a></span>
+<span id="cb27-4"><a href="#cb27-4"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity shell multiqc.sif <span class="co"># Enter the container</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="ex">Singularity</span><span class="op">&gt;</span> pwd                      <span class="co"># Where are we inside the container?</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="ex">Singularity</span><span class="op">&gt;</span> ls                       <span class="co"># And which files do we see?</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="ex">Singularity</span><span class="op">&gt;</span> touch ThisFileWasCreatedInsideTheContainer <span class="co"># Create a new file inside the container</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a><span class="ex">Singularity</span><span class="op">&gt;</span> exit</span>
+<span id="cb27-9"><a href="#cb27-9"></a></span>
+<span id="cb27-10"><a href="#cb27-10"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls          <span class="co"># Do you see the file you created inside the container?</span></span></code></pre></div>
+<p><br/></p>
+<p>At OSC, the following directories are also bind-mounted by default:</p>
+<ul>
+<li><code>/fs/project</code></li>
+<li><code>/fs/scratch</code></li>
+</ul>
+<p><br/></p>
+<p>Finally, we can bind-mount directories upon runtime of the container, using the <code>-B</code> option: <code>singularity exec -B dir/in/host[:/dir/in/container] &lt;image.sif&gt;</code>. By default, the path in the container will be the same as in the host, but this can be changed by appending <code>:/dir/in/container</code>.</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="really-running-our-container" class="section level1">
+<h1><span class="header-section-number">9</span> <em>Really</em> running our container</h1>
+<p>Now we are ready to run <code>multiqc</code> with some actual data. What <code>multiqc</code> does is summarize individual-level QC results from other programs such as <code>fastqc</code>. Therefore, its input can be a number of <code>fastqc</code> output files. I have put some of those in <code>/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</code>. Let’s see:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls /fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span></code></pre></div>
+<p><br/></p>
+<p>Since <code>/fs/ess/</code> happens <em>not</em> to be bind-mounted by default, we will need to do this manually. Otherwise, to run <code>multiqc</code>, all we need to do is specify the directory with files to analyze:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ fastqc_dir=/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span>
+<span id="cb29-2"><a href="#cb29-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity exec -B <span class="va">$fastqc_dir</span> multiqc.sif multiqc <span class="va">$fastqc_dir</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls</span></code></pre></div>
+<p>Why did we create a variable <code>fastqc_dir</code> first?</p>
+<p><br/></p>
+<p>Now we have performed an actual analysis using a container!</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="appendix-1-using-conda-at-osc" class="section level1">
+<h1><span class="header-section-number">10</span> Appendix 1: Using <code>conda</code> at OSC</h1>
+<p>Let’s create a <code>conda</code> environment with <code>multiqc</code> installed.</p>
+<p><br/></p>
+<p>First, we need to load the appropriate module at OSC:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
+<p><br/></p>
+<p>While we could now install <code>multiqc</code> directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new <code>conda</code> environment (that we will simply name <code>multiqc</code>) and install <code>multiqc</code> in it:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
+<ul>
+<li><code>create</code> is the <code>conda</code> sub-command to create a new environment.</li>
+<li><code>-y</code> avoids a confirmation prompt.</li>
+<li><code>-n multiqc</code> is the name for the new environment.</li>
+<li><code>-c bioconda</code> is the <code>conda</code> “channel” we download from.</li>
+<li><code>multiqc</code> is the name of the package.</li>
+</ul>
+<p>If <code>conda</code> complains, saying that your shell is not configured properly for <code>conda</code>, you need to run the following (as that long error message should also specify):</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<p>This will run a <code>conda</code> setup shell script whenever you open a terminal (since <code>~/.bashrc</code> is always run when you open a terminal).</p>
+<p><br/></p>
+<p>Now, we activate the <code>multiqc</code> environment and see if we can run it:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">(</span><span class="ex">multiqc</span><span class="kw">)</span> [<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ multiqc --help <span class="co"># The prompt indicates your conda environment!</span></span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="appendix-2-more-module" class="section level1">
+<h1><span class="header-section-number">11</span> Appendix 2: More <code>module</code></h1>
+<p>Logged in at OSC, we’ll try some <code>module</code> commands for loading and unloading software.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around and also check which versions of R you see</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Now we just get the &quot;spider&quot; results for R at once!</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R       <span class="co"># Which version of R is being loaded?</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R     <span class="co"># We&#39;ll unload the default R version</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1 <span class="co"># Read the printed text -- what happened? </span></span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="appendix-3-assigning-variables" class="section level1">
+<h1><span class="header-section-number">12</span> Appendix 3: Assigning variables</h1>
+<p>In the section on <code>$PATH</code>, we saw a bit of variable assignment, but perhaps this was confusing. Let’s look at it a bit more to clarify:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;My latest masterpiece&quot;</span> <span class="op">&gt;</span> book.txt   <span class="co"># First we create a mock file</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ recommended_book=<span class="st">&quot;book.txt&quot;</span>               <span class="co"># Assign using variable=value / variable = &quot;value&quot;</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$recommended_book</span>                    <span class="co"># Recall the variable using a &quot;$&quot;</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat <span class="va">$recommended_book</span>                     <span class="co"># This will work too!</span></span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="appendix-4-manual-installation" class="section level1">
+<h1><span class="header-section-number">13</span> Appendix 4: Manual installation</h1>
+<p><br/></p>
+<div id="installing-vcftools-manually" class="section level2">
+<h2><span class="header-section-number">13.1</span> Installing <code>vcftools</code> manually</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">wget</span> https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar <span class="co"># Download the archive</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="fu">tar</span> -xvf vcftools.tar               <span class="co"># Unpack the archive</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="bu">cd</span> vcftools-vcftools-581c231/       <span class="co"># Move into the dir that was created</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="ex">./autogen.sh</span>                        <span class="co"># Run a script that will generate the configure script</span></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="ex">./configure</span>                         <span class="co"># Run the configure script</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a></span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the vcftools dir</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="ex">vcftools</span>                            <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<p><br/></p>
+</div>
+<div id="installing-bowtie2-manually" class="section level2">
+<h2><span class="header-section-number">13.2</span> Installing <code>bowtie2</code> manually</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">git</span> clone https://github.com/BenLangmead/bowtie2.git <span class="co"># Download using the git&#39;s clone sub-command</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="bu">cd</span> bowtie2                          <span class="co"># Move into the dir</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the bowtie dir</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a><span class="ex">bowtie2</span>                             <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

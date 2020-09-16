@@ -1,8 +1,9 @@
-name: "my-website"
+name: "HSC7004_Lab3"
+output_dir: docs
 navbar:
-  title: "My Website"
+  title: "Lab 3"
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Lab 3"
+      href: Lab3.html

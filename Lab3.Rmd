@@ -1,0 +1,498 @@
+---
+title: |
+  | HCS7004 - Lab 3:
+  | Software installation and containers
+pagetitle: "HCS7004 - Lab 3"
+output:
+  html_document:
+    number_sections: true
+    highlight: tango
+    toc: true
+    toc_float: true
+---
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
+<br/>
+
+******
+<br/>
+
+To get started, we'll create and move into a directory for this lab: 
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ mkdir lab3_containers
+hcs7004@ubuntu:~$ cd lab3_containers
+```
+
+<br/>
+
+# The `$PATH` environment variable
+
+The `$PATH` environment variables holds all the directories from which executables can be called directly, that is, without specifying the full path to the executable. Let's see which directories are in our `$PATH`.
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ echo $PATH                          # The output is a little hard to read...
+
+hcs7004@ubuntu:~$ echo $PATH | tr ":" "\n" | nl       # That's better!
+```
+
+<br/>
+
+Do you remember how we can add a directory to `$PATH`? Let's say we want to add our newly created dir `lab3_containers`.
+
+<details>
+<summary>Show answer</summary>
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ PATH=$PATH:$HOME/lab3_containers/
+```
+Here, I used `$HOME` instead of `/home/<my-user-name>`, because it will work for any of you regardless of your user name. `$HOME` is another environment variable; as is your user name `$USER` -- so we could have also entered `/home/$USER` regardless of the actual user name.
+</details>
+<br/>
+
+To permanently add a directory to `$PATH`, add it to your `~/.bashrc` file.
+How could we do this in a single line on the command line?
+
+<details>
+<summary>Show answer</summary>
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ echo "$PATH:/path/to/dir/lab3_containers/" >> ~/.bashrc
+```
+</details>
+<br/>
+
+With the `which` command (or `whereis` for similar results), we can check where software that is available to the `$PATH` is located, since we can have many directories in it. Even commands like `grep` have executables, and they can simply be called by their name because these executables are in dirs in your `$PATH`:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ which grep
+```
+
+******
+<br/>
+
+# Use of `apt-get`
+
+For software installation on an Ubuntu operating system, such as the one in your virtual box, `apt-get` is your go-to command. When you install software (“packages”) this way, the software will be available in your `$PATH`, dependencies will be automatically handled, and you will be prompted whenever software updates become available to the package manager.
+
+Recall that we'll need admin privileges to use `apt-get`, and will therefore prepend our commands with `sudo`. This way, we execute the commands with admin rights/privileges (“`sudo` privileges”). When you execute the first command with `sudo` below, you’ll be prompted for your personal password (and whenever you use `sudo` again within the next 15 minutes, you won’t be prompted).
+
+Some bioinformatics tools, such as `samtools`, are available through `apt-get`:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ samtools                        # This should not work: samtools is not installed
+
+hcs7004@ubuntu:~$ apt-get update                  # Nope!
+
+hcs7004@ubuntu:~$ sudo apt-get update             # First, update the package manager index
+hcs7004@ubuntu:~$ sudo apt-get install samtools   # Then install samtools (answer "Y" when prompted)
+
+hcs7004@ubuntu:~$ samtools                        # Now, samtools is installed & available in $PATH
+```
+<br/>
+
+Today, we will be working with the container software **`Singularity`**, which is *not* available through `apt-get`. Therefore, we will first need to install its dependencies, some with `apt-get` and others manually, and *then* we install Singularity manually.
+
+We start with installing a few of the Singularity dependencies with `apt-get`.
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo apt-get install -y build-essential libssl-dev uuid-dev wget
+```
+
+******
+<br/>
+
+# Installing `Singularity`
+Since the installation of Singularity involves relatively many steps, we’ll use the shell script `installing_singularity.sh`. Like any shell script, it is simply a collection of shell commands. In other words, you could also enter these commands one-by-one on the command line. These commands were taken from the [Singularity installation instructions](https://sylabs.io/guides/3.5/user-guide/quick_start.html#quick-installation-steps), so there is no magic here.
+
+<br/>
+
+We download the script with installation instructions:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ wget http://bit.ly/HCS7004 -O installing_singularity.sh
+hcs7004@ubuntu:~$ ls
+hcs7004@ubuntu:~$ chmod u+x installing_singularity.sh     # This will make the script executable
+hcs7004@ubuntu:~$ ls                                      # Note the change in color!
+```
+<br/>
+
+Have a look at the script to get an idea of what's being done there. How do we do that again?
+
+<details>
+<summary>Show answer</summary>
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ less installing_singularity.sh
+
+hcs7004@ubuntu:~$ head installing_singularity.sh        # We could also take a look at the first few lines
+hcs7004@ubuntu:~$ cat installing_singularity.sh         # Or print the entire file to the screen (not always ideal)
+```
+</details>
+<br/>
+
+
+- What do you think the first line of the script does?
+- Please identify at least one line in the script that you would like to understand better. 
+
+<br/>
+
+Now, we’ll run the script:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ ./installing_singularity.sh
+```
+(If you get errors, try to figure out at which line those occurred. We'll try to rerun line-by-line from there onwards, in that case.)
+
+<br/>
+
+Let’s check whether `Singularity` was successfully installed:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ singularity
+```
+
+******
+<br/>
+
+# Our options to run `multiqc`
+`multiqc` is an extremely useful program for summarizing quality control (“QC”) results for multiple samples. Unfortunately, it’s not available at OSC. (How could we check this?)
+
+<br/>
+
+Now, our main options are:
+
+1. Install it manually
+2. Use `conda`
+3. Use a container
+
+What are some pros and cons of these different options?
+
+<br/>
+
+We'll now look for `multiqc` at the [Biocontainers website](https://biocontainers.pro). Click on “*Registry*” in the top bar, then enter “*multiqc*” in the search box. Do you get any hits?
+
+The [tool page](https://biocontainers.pro/#/tools/multiqc) that you should have found gives lots of details, including installation instructions with `conda`, `Docker`, and `Singularity`. It's perhaps a bit confusing that this website also gives `conda` options, since that's not technically a container platform, but it's still handy.
+
+******
+<br/>
+
+# Downloading and running a `multiqc` container
+
+At [multiqc's Biocontainers page](https://biocontainers.pro/#/tools/multiqc), we find the following instructions for Singularity, which will download and run the container:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0
+Singularity>
+```
+
+Apparently, the default run script was to enter a shell (i.e. a terminal) within the container, as indicated with the `Singularity>` prompt. You should also see this prompt yourself, and it indicates that your are inside the container.
+
+<br/>
+
+How could we check whether `multiqc` is installed?
+
+<details>
+<summary>Show answer</summary>
+```{bash, eval=FALSE}
+Singularity> multiqc
+
+Singularity> multiqc --help
+```
+</details>
+<br/>
+
+In most cases, it would be a bit more practical to first just download the container image using `singularity pull <image-ID>`. (Another side note is that the "address" to the container provided here is not the canonical form, I'm not sure why Biocontainers does this. The same container is also hosted at [quay.io](https://quay.io/), from which it can be downloaded using `singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1`.)
+
+<br/>
+
+Which version of `multiqc` did we just download? Which other versions are available? How would we download one of those?
+
+******
+<br/>
+
+# Building our own container
+
+To practice, we’ll now build our own `Singularity` container with `multiqc.` Recall that you need `sudo` privileges to build a container, so we'll do this on our own computer/Virtualbox.
+
+<br/>
+
+First, create a directory for the container (within the `lab3_containers/` dir):
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ mkdir multiqc
+```
+<br/>
+
+We will now create a special type of container image that allows for interactive modification using the `--sandbox` option, with `multiqc/` being the target directory (which will be created) and `docker://ubuntu:20.04` being the base image.
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo singularity build --sandbox multiqc/ docker://ubuntu:20.04
+```
+
+Once the build is complete, we have created a container with an Ubuntu OS, and can simply open a shell in it with the `singularity shell` sub-command. How did this compare to installing an Ubuntu Virtual Machine?
+
+<br/>
+
+Now, when we ussue the `singularity shell` command, we will also use the `--writable` option: that way, the container image will be modified by what you do in the container (as opposed to regular usage of a container, in which it is used as a *static* computing environment):
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo singularity shell --writable multiqc/
+```
+(You’ll get a few warnings, which can be ignored.)
+<br/>
+<br/>
+
+Now, we have entered the container: the commands below should be entered inside the container, as again indicated by the `Singularity>` prompt. We’ll first update the package manager index and install two dependencies for `multiqc.` Note that we don’t need `sudo` for the `apt-get` commands: because we entered the container with `sudo` privileges, those *carried over* into the container.
+
+```{bash, eval=FALSE}
+Singularity> apt-get update
+Singularity> apt-get install -y python3-pip git     # This will take a while
+```
+<br/>
+
+Now, we’ll install `multiqc` using the Python package manager `pip` (which we just installed above):
+```{bash, eval=FALSE}
+Singularity> pip3 install git+https://github.com/ewels/MultiQC.git
+```
+<br/>
+
+Let’s test whether that worked:
+```{bash, eval=FALSE}
+Singularity> multiqc -h
+Singularity> multiqc --version
+```
+<br/>
+
+We’ll exit the container:
+```{bash, eval=FALSE}
+Singularity> exit
+```
+<br/>
+
+Now, from our special sandbox container, we’ll build a regular container image file. We’ll later transfer this image file to OSC to run `multiqc` there. (We could also upload our image to a personal, public repository so that others can use our container, too.)
+
+Note that we use the `build` sub-command again, but now without the `--sandbox` option. As arguments, we give the target image file `multiqc.sif` (with `.sif` being the standard extension for `Singularity` container image files) and the existing sandbox directory `multiqc/`:
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo singularity build multiqc.sif multiqc/
+```
+<br/>
+
+Excellent, we have created a container image!
+
+******
+<br/>
+
+# Running our container at OSC
+
+We’ll upload our container image to OSC using `sftp`:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sftp <username>@sftp.osc.edu  # Replace "<username>" by your actual OSC user name
+
+sftp> mkdir /fs/scratch/PAS1752/<username>/lab3_containers/ # Note: we can use regular shell commands
+sftp> put multiqc.sif /fs/scratch/PAS1752/<username>/lab3_containers/
+sftp> exit
+```
+<br/>
+
+Now, let’s move to OSC. You can either `ssh` in (`ssh <username>@owens.osc.edu`), or open a terminal in [OnDemand](http://ondemand.osc.edu/). Then, go the directory that you uploaded the container image file to:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ cd /fs/scratch/PAS1752/<username>/lab3_containers/
+[<user>@owens-login01 ~]$ ls # You should see you container "multiqc.sif"
+```
+<br/>
+
+`Singularity` is installed at OSC, but it does need to be loaded first:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module load singularity
+```
+<br/>
+
+Now, we’ll run `multiqc` from our container. We do this using another `singularity` sub-command: `exec` (short for “*execute*”).
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ singularity exec multiqc.sif multiqc -h
+[<user>@owens-login01 ~]$ singularity exec multiqc.sif multiqc --version
+```
+<br/>
+
+With `singularity exec`, we executed a shell command inside the container and immediately exited. Recall that running software this way is almost the same as running locally installed software:
+
+```{bash, eval=FALSE}
+$ multiqc -h                        # This is what you would do if you had multiqc installed locally
+
+$ singularity exec multiqc.sif \    # “Containerized” execution.
+     multiqc -h                     
+```
+
+******
+<br/>
+
+# File sharing with containers
+
+So far, all we did with `multiqc` was run its help function. What if we wanted it to analyze actual data have output returned by the program -- how would that work with a container?
+
+An important aspect of dealing with containers is the sharing of files between host and container. With Singularity (but not Docker), several directories are "*bind-mounted*" (attached/connected) between the host and container *by default*:
+
+- `$HOME` (`/home/$USER`): your home directory
+- `$PWD`: your current working directory
+- `/tmp`
+<br/>
+
+Moreover, when you enter a container (e.g. via `singularity shell`) or execute a command directly (via `singularity exec`), you will be located at your host's current working directory within the container, too. And since the current working directory is bind-mounted by default, this means that files written to the current directory in the container, will also be (and remain) present in the host.
+
+Confusing? Let's look at this in practice:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ pwd         # Let's check our current dir at OSC (the host)
+[<user>@owens-login01 ~]$ ls          # And let's list our files there
+
+[<user>@owens-login01 ~]$ singularity shell multiqc.sif # Enter the container
+Singularity> pwd                      # Where are we inside the container?
+Singularity> ls                       # And which files do we see?
+Singularity> touch ThisFileWasCreatedInsideTheContainer # Create a new file inside the container
+Singularity> exit
+
+[<user>@owens-login01 ~]$ ls          # Do you see the file you created inside the container?
+```
+<br/>
+
+At OSC, the following directories are also bind-mounted by default:
+
+- `/fs/project`
+- `/fs/scratch`
+
+<br/>
+
+Finally, we can bind-mount directories upon runtime of the container,
+using the `-B` option: `singularity exec -B dir/in/host[:/dir/in/container] <image.sif>`.
+By default, the path in the container will be the same as in the host, but this can be changed by appending `:/dir/in/container`.
+
+
+******
+<br/>
+
+
+# *Really* running our container
+
+Now we are ready to run `multiqc` with some actual data. What `multiqc` does is summarize individual-level QC results from other programs such as `fastqc`. Therefore, its input can be a number of `fastqc` output files. I have put some of those in `/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files`. Let's see:
+
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ ls /fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files
+```
+<br/>
+
+Since `/fs/ess/` happens *not* to be bind-mounted by default, we will need to do this manually. Otherwise, to run `multiqc`, all we need to do is specify the directory with files to analyze:
+
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ fastqc_dir=/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files
+[<user>@owens-login01 ~]$ singularity exec -B $fastqc_dir multiqc.sif multiqc $fastqc_dir
+[<user>@owens-login01 ~]$ ls
+```
+
+Why did we create a variable `fastqc_dir` first?
+
+<br/>
+
+Now we have performed an actual analysis using a container!
+
+******
+<br/>
+
+# Appendix 1: Using `conda` at OSC
+
+Let's create a `conda` environment with `multiqc` installed.
+
+<br/>
+
+First, we need to load the appropriate module at OSC: 
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module load python/3.6-conda5.2 # (conda is associated with Python)
+```
+<br/>
+
+While we could now install `multiqc` directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new `conda` environment (that we will simply name `multiqc`) and install `multiqc` in it:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc # This will take a while
+```
+
+- `create` is the `conda` sub-command to create a new environment.
+- `-y` avoids a confirmation prompt.
+- `-n multiqc` is the name for the new environment.
+- `-c bioconda` is the `conda` "channel" we download from.
+- `multiqc` is the name of the package.
+
+If `conda` complains, saying that your shell is not configured properly for `conda`, you need to run the following (as that long error message should also specify):
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
+```
+This will run a `conda` setup shell script whenever you open a terminal (since `~/.bashrc` is always run when you open a terminal).
+
+<br/>
+
+Now, we activate the `multiqc` environment and see if we can run it: 
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ conda activate multiqc
+(multiqc) [<user>@owens-login01 ~]$ multiqc --help # The prompt indicates your conda environment!
+```
+
+
+******
+<br/>
+
+# Appendix 2: More `module`
+
+Logged in at OSC, we'll try some `module` commands for loading and unloading software.
+
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module avail        # Look around and also check which versions of R you see
+[<user>@owens-login01 ~]$ module spider       # Idem as above
+[<user>@owens-login01 ~]$ module spider R     # Now we just get the "spider" results for R at once!
+[<user>@owens-login01 ~]$ module load R       # Which version of R is being loaded?
+
+[<user>@owens-login01 ~]$ module unload R     # We'll unload the default R version
+[<user>@owens-login01 ~]$ module load R/4.0.2-gnu9.1 # Read the printed text -- what happened? 
+
+
+```
+
+
+
+******
+<br/>
+
+# Appendix 3: Assigning variables
+
+In the section on `$PATH`, we saw a bit of variable assignment, but perhaps this was confusing. Let's look at it a bit more to clarify:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ echo "My latest masterpiece" > book.txt   # First we create a mock file
+
+hcs7004@ubuntu:~$ recommended_book="book.txt"               # Assign using variable=value / variable = "value"
+
+hcs7004@ubuntu:~$ echo $recommended_book                    # Recall the variable using a "$"
+hcs7004@ubuntu:~$ cat $recommended_book                     # This will work too!
+```
+
+******
+<br/>
+
+# Appendix 4: Manual installation
+
+<br/>
+
+## Installing `vcftools` manually
+```{bash, eval=FALSE}
+wget https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar # Download the archive
+tar -xvf vcftools.tar               # Unpack the archive
+cd vcftools-vcftools-581c231/       # Move into the dir that was created
+./autogen.sh                        # Run a script that will generate the configure script
+./configure                         # Run the configure script
+make                                # Compile the program
+sudo make install                   # Optional - copy the executables to your $PATH
+
+cd ..                               # Move out of the vcftools dir
+vcftools                            # Check if it's installed
+```
+
+<br/>
+
+## Installing `bowtie2` manually
+```{bash, eval=FALSE}
+git clone https://github.com/BenLangmead/bowtie2.git # Download using the git's clone sub-command
+cd bowtie2                          # Move into the dir
+make                                # Compile the program
+sudo make install                   # Optional - copy the executables to your $PATH
+
+cd ..                               # Move out of the bowtie dir
+bowtie2                             # Check if it's installed
+```
