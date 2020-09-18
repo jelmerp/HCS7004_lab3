@@ -689,8 +689,8 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <hr />
 <p><br/></p>
 </div>
-<div id="appendix-1-using-conda-at-osc" class="section level1">
-<h1><span class="header-section-number">10</span> Appendix 1: Using <code>conda</code> at OSC</h1>
+<div id="appx.-1-using-conda-at-osc" class="section level1">
+<h1><span class="header-section-number">10</span> Appx. 1: Using <code>conda</code> at OSC</h1>
 <p>Let’s create a <code>conda</code> environment with <code>multiqc</code> installed.</p>
 <p><br/></p>
 <p>First, we need to load the appropriate module at OSC:</p>
@@ -715,57 +715,135 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <hr />
 <p><br/></p>
 </div>
-<div id="appendix-2-more-module" class="section level1">
-<h1><span class="header-section-number">11</span> Appendix 2: More <code>module</code></h1>
+<div id="appx.-2-more-module" class="section level1">
+<h1><span class="header-section-number">11</span> Appx. 2: More <code>module</code></h1>
 <p>Logged in at OSC, we’ll try some <code>module</code> commands for loading and unloading software.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around and also check which versions of R you see</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
-<span id="cb34-3"><a href="#cb34-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Now we just get the &quot;spider&quot; results for R at once!</span></span>
-<span id="cb34-4"><a href="#cb34-4"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R       <span class="co"># Which version of R is being loaded?</span></span>
-<span id="cb34-5"><a href="#cb34-5"></a></span>
-<span id="cb34-6"><a href="#cb34-6"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R     <span class="co"># We&#39;ll unload the default R version</span></span>
-<span id="cb34-7"><a href="#cb34-7"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1 <span class="co"># Read the printed text -- what happened? </span></span></code></pre></div>
+<p>First, let’s explore the modules (software) that are available.</p>
+<ul>
+<li><code>module avail</code> will list all the modules that can be directly loaded, given the current environment.</li>
+<li><code>module spider</code> will list all modules that could potentially be loaded, and you can also add a search term to narrow down the results.</li>
+</ul>
+<p>Let’s compare:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around; and check which versions of R you see</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a></span>
+<span id="cb34-5"><a href="#cb34-5"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Narrow down to R immediately</span></span></code></pre></div>
+<p>Were the available versions of R different between the <code>module avail</code> and <code>module spider</code> commands?</p>
+<p><br/></p>
+<p>Now, let’s load <code>R</code> without specifying a version:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R</span></code></pre></div>
+<p>Which version of <code>R</code> was loaded?</p>
+<p><br/></p>
+<p>But we heard lots of good things about the latest version of R, so we’ll load that instead:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R             <span class="co"># First unload the default R version</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  </span></code></pre></div>
+<p>What happened when we did this, besides the switch of the <code>R</code> version?</p>
 <hr />
 <p><br/></p>
 </div>
-<div id="appendix-3-assigning-variables" class="section level1">
-<h1><span class="header-section-number">12</span> Appendix 3: Assigning variables</h1>
-<p>In the section on <code>$PATH</code>, we saw a bit of variable assignment, but perhaps this was confusing. Let’s look at it a bit more to clarify:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;My latest masterpiece&quot;</span> <span class="op">&gt;</span> book.txt   <span class="co"># First we create a mock file</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a></span>
-<span id="cb35-3"><a href="#cb35-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ recommended_book=<span class="st">&quot;book.txt&quot;</span>               <span class="co"># Assign using variable=value / variable = &quot;value&quot;</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a></span>
-<span id="cb35-5"><a href="#cb35-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$recommended_book</span>                    <span class="co"># Recall the variable using a &quot;$&quot;</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat <span class="va">$recommended_book</span>                     <span class="co"># This will work too!</span></span></code></pre></div>
+<div id="appx.-3-writing-a-singularity-definition-file" class="section level1">
+<h1><span class="header-section-number">12</span> Appx. 3: Writing a Singularity <em>Definition file</em></h1>
+<p>It is best practice to produce your <em>final</em> container image from a text file containing the recipe for the build, namely a <em>Definition file</em> when creating a <code>Singularity</code> image, or a <em>Dockerfile</em> when creating a <code>Docker</code> image. While it is fine to initially build things interactively like we did in Section 6, once that is done, the next step is to write a recipe file. Understanding these files will also help you when you find a container image (and its recipe file) that is similar to what you want but not exactly right, so you can quickly edit it.</p>
+<p><br/></p>
+<p>Now, we’ll create <code>Singularity</code> <em>Definition file</em> (<em>Def file</em> for short) for the container that we built interactively in Section 6. Let’s start by creating and moving into a new directory, and then creating and opening a text file that will become our <em>Def file</em>.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir def-file-build</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd def-file-build</span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_mini.def</span></code></pre></div>
+<p><br/></p>
+<p>To get started with the <em>Def file</em>, we’ll define the starting image (base layer) – like in Section 6, we’ll use the latest stable Ubuntu release. In <em>Def files</em>, we start with a <em>Header</em> that uses keywords to define the base operating system, with <code>Bootstrap:</code> indicating the registry and <code>From:</code> the base image. So, our <code>docker://ubuntu:20.04</code> label in the interactive build becomes:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1"></a><span class="ex">Bootstrap</span>: docker             <span class="co"># Enter these definition file lines in Nano!</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="ex">From</span>: ubuntu:20.04 </span></code></pre></div>
+<p><br/></p>
+<p>The main content is broken up into optional predefined sections indicated with <code>%&lt;section-name&gt;</code>. The <code>%post</code> section is generally the most important; here, we can for example enter shell commands that perform software installation.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1"></a><span class="ex">%post</span>                         <span class="co"># (We&#39;re still in Nano!)</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>    <span class="ex">apt-get</span> update            <span class="co"># Indent these lines with a tab</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
+<span id="cb39-4"><a href="#cb39-4"></a>    <span class="fu">install</span> git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
+<p>It is important to add the <code>-y</code> option to <code>apt-get install</code> in this case, since building the container happens non-interactively and we wouldn’t be able to answer a prompt.</p>
+<p><br/></p>
+<p>From these few lines, we can already build a container! Save your changes in <code>nano</code> by pressing <code>Ctrl + O</code> and then exit by pressing <code>Ctrl + X</code>. We’ll use the <code>build</code> sub-command to build a container image from our <em>Def file</em>:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_mini.sif multiqc_mini.def</span></code></pre></div>
+<p><br/></p>
+<p>We’ve built a container from scratch! Finally, let’s test it:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity exec multiqc_mini.sif multiqc --version</span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
-<div id="appendix-4-manual-installation" class="section level1">
-<h1><span class="header-section-number">13</span> Appendix 4: Manual installation</h1>
+<div id="appx.-4-improving-our-def-file" class="section level1">
+<h1><span class="header-section-number">13</span> Appx. 4: Improving our <em>Def file</em></h1>
+<p>We’ll now make a number of small improvements to our <em>Def file</em>, mostly in “best practice” fashion.</p>
+<p>Copy the initial <em>Def file</em> to a new file and open it in <code>Nano</code>:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ cp multiqc_mini.def multiqc_improved.def</span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_improved.def</span></code></pre></div>
+<p>First, we’ll add two lines to our <code>%post</code> section, to clean up after installation, which may reduce the size of the resulting container image.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1"></a><span class="ex">%post</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a>    <span class="ex">apt-get</span> update</span>
+<span id="cb43-3"><a href="#cb43-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
+<span id="cb43-4"><a href="#cb43-4"></a>    <span class="ex">apt-get</span> clean all                   <span class="co"># Add this line</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a>    <span class="ex">apt-get</span> purge -y                    <span class="co"># Add this line</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a>    <span class="ex">pip3</span> install git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
 <p><br/></p>
-<div id="installing-vcftools-manually" class="section level2">
-<h2><span class="header-section-number">13.1</span> Installing <code>vcftools</code> manually</h2>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">wget</span> https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar <span class="co"># Download the archive</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="fu">tar</span> -xvf vcftools.tar               <span class="co"># Unpack the archive</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="bu">cd</span> vcftools-vcftools-581c231/       <span class="co"># Move into the dir that was created</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a><span class="ex">./autogen.sh</span>                        <span class="co"># Run a script that will generate the configure script</span></span>
-<span id="cb36-5"><a href="#cb36-5"></a><span class="ex">./configure</span>                         <span class="co"># Run the configure script</span></span>
-<span id="cb36-6"><a href="#cb36-6"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
-<span id="cb36-8"><a href="#cb36-8"></a></span>
-<span id="cb36-9"><a href="#cb36-9"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the vcftools dir</span></span>
-<span id="cb36-10"><a href="#cb36-10"></a><span class="ex">vcftools</span>                            <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<p>Next, we’ll add some metadata, so that other people who may get a hold of our container image file (for instance, after we share our image at a registry), will know what it does and who produced it. For this, we use the <code>%labels</code> section with a couple of keyword-value combinations, and the <code>%help</code> section with free-form text describing the container:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1"></a><span class="ex">%labels</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>    <span class="ex">Author</span> HCS7006</span>
+<span id="cb44-3"><a href="#cb44-3"></a>    <span class="ex">Version</span> latest</span>
+<span id="cb44-4"><a href="#cb44-4"></a>    </span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="ex">%help</span></span>
+<span id="cb44-6"><a href="#cb44-6"></a>    <span class="ex">This</span> container has MultiQC installed on top of ubuntu 20.04</span></code></pre></div>
+<p><br/></p>
+<p>Finally, we will add a default command that will be executed if we would run the resulting image with the <code>singularity run</code> sub-command. <code>multiqc --version</code> could be a useful command here:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1"></a><span class="ex">%runscript</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>    <span class="ex">multiqc</span> --version</span></code></pre></div>
+<p><br/></p>
+<p>Exit <code>nano</code> (<code>Ctrl + O</code> then <code>Ctrl + X</code>) and build and run the improved container image:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_improved.sif multiqc_improved.def</span>
+<span id="cb46-2"><a href="#cb46-2"></a></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_improved.sif</span></code></pre></div>
+<p><br/></p>
+<p>A useful section that we haven’t used is <code>%files</code>, which can be used to copy files into the container. The <a href="https://sylabs.io/guides/3.0/user-guide/definition_files.html">Singularity documentation on Def files</a> has information on these and even more possible sections.</p>
+<hr />
 <p><br/></p>
 </div>
-<div id="installing-bowtie2-manually" class="section level2">
-<h2><span class="header-section-number">13.2</span> Installing <code>bowtie2</code> manually</h2>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">git</span> clone https://github.com/BenLangmead/bowtie2.git <span class="co"># Download using the git&#39;s clone sub-command</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a><span class="bu">cd</span> bowtie2                          <span class="co"># Move into the dir</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
-<span id="cb37-5"><a href="#cb37-5"></a></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the bowtie dir</span></span>
-<span id="cb37-7"><a href="#cb37-7"></a><span class="ex">bowtie2</span>                             <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<div id="appx.-5-assigning-variables" class="section level1">
+<h1><span class="header-section-number">14</span> Appx. 5: Assigning variables</h1>
+<p>In the section on <code>$PATH</code>, we saw a bit of variable assignment at the command line, but perhaps this did not become entirely clear. Let’s look at it a bit more to clarify:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;My latest masterpiece&quot;</span> <span class="op">&gt;</span> book.txt   <span class="co"># First we create a mock file</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ recommended_book=<span class="st">&quot;book.txt&quot;</span>               <span class="co"># Assign using variable=value / variable = &quot;value&quot;</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a></span>
+<span id="cb47-5"><a href="#cb47-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$recommended_book</span>                    <span class="co"># Recall the variable using a &quot;$&quot;</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat <span class="va">$recommended_book</span>                     <span class="co"># This works too - it will display the file contents!</span></span></code></pre></div>
+<hr />
+<p><br/></p>
+</div>
+<div id="appx.-6-manual-installation" class="section level1">
+<h1><span class="header-section-number">15</span> Appx. 6: Manual installation</h1>
+<p><br/></p>
+<div id="install-vcftools-manually" class="section level2">
+<h2><span class="header-section-number">15.1</span> Install <code>vcftools</code> manually</h2>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">wget</span> https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar <span class="co"># Download the archive</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">tar</span> -xvf vcftools.tar               <span class="co"># Unpack the archive</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="bu">cd</span> vcftools-vcftools-581c231/       <span class="co"># Move into the dir that was created</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a><span class="ex">./autogen.sh</span>                        <span class="co"># Run a script that will generate the configure script</span></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="ex">./configure</span>                         <span class="co"># Run the configure script</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb48-7"><a href="#cb48-7"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb48-8"><a href="#cb48-8"></a></span>
+<span id="cb48-9"><a href="#cb48-9"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the vcftools dir</span></span>
+<span id="cb48-10"><a href="#cb48-10"></a><span class="ex">vcftools</span>                            <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<p><br/></p>
+</div>
+<div id="install-bowtie2-manually" class="section level2">
+<h2><span class="header-section-number">15.2</span> Install <code>bowtie2</code> manually</h2>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">git</span> clone https://github.com/BenLangmead/bowtie2.git <span class="co"># Download using the git&#39;s clone sub-command</span></span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="bu">cd</span> bowtie2                          <span class="co"># Move into the dir</span></span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb49-5"><a href="#cb49-5"></a></span>
+<span id="cb49-6"><a href="#cb49-6"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the bowtie dir</span></span>
+<span id="cb49-7"><a href="#cb49-7"></a><span class="ex">bowtie2</span>                             <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
 </div>
 </div>
 

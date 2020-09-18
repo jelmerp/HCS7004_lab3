@@ -388,7 +388,7 @@ Now we have performed an actual analysis using a container!
 ******
 <br/>
 
-# Appendix 1: Using `conda` at OSC
+# Appx. 1: Using `conda` at OSC
 
 Let's create a `conda` environment with `multiqc` installed.
 
@@ -429,30 +429,202 @@ Now, we activate the `multiqc` environment and see if we can run it:
 ******
 <br/>
 
-# Appendix 2: More `module`
+# Appx. 2: More `module`
 
 Logged in at OSC, we'll try some `module` commands for loading and unloading software.
 
+First, let's explore the modules (software) that are available.
+
+- `module avail` will list all the modules that can be directly loaded, given the current environment.
+- `module spider` will list all modules that could potentially be loaded, and you can also add a search term to narrow down the results.
+
+Let's compare:
+
 ```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ module avail        # Look around and also check which versions of R you see
+[<user>@owens-login01 ~]$ module avail        # Look around; and check which versions of R you see
+
 [<user>@owens-login01 ~]$ module spider       # Idem as above
-[<user>@owens-login01 ~]$ module spider R     # Now we just get the "spider" results for R at once!
-[<user>@owens-login01 ~]$ module load R       # Which version of R is being loaded?
 
-[<user>@owens-login01 ~]$ module unload R     # We'll unload the default R version
-[<user>@owens-login01 ~]$ module load R/4.0.2-gnu9.1 # Read the printed text -- what happened? 
-
-
+[<user>@owens-login01 ~]$ module spider R     # Narrow down to R immediately
 ```
 
+Were the available versions of R different between the `module avail` and `module spider` commands? 
+
+<br/>
+
+Now, let's load `R` without specifying a version:
+
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module load R
+```
+
+Which version of `R` was loaded?
+
+<br/>
+
+But we heard lots of good things about the latest version of R, so we'll load that instead:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module unload R             # First unload the default R version
+[<user>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  
+```
+
+What happened when we did this, besides the switch of the `R` version?
 
 
 ******
 <br/>
 
-# Appendix 3: Assigning variables
+# Appx. 3: Writing a Singularity *Definition file*
 
-In the section on `$PATH`, we saw a bit of variable assignment, but perhaps this was confusing. Let's look at it a bit more to clarify:
+It is best practice to produce your *final* container image from a text file
+containing the recipe for the build,
+namely a *Definition file* when creating a `Singularity` image,
+or a *Dockerfile* when creating a `Docker` image.
+While it is fine to initially build things interactively like we did in Section 6, once
+that is done, the next step is to write a recipe file.
+Understanding these files will also help you when you find a container image (and its recipe file)
+that is similar to what you want but not exactly right, so you can quickly edit it.
+
+<br/>
+
+Now, we'll create `Singularity` *Definition file* (*Def file* for short) for the container
+that we built interactively in Section 6.
+Let's start by creating and moving into a new directory, and then creating and opening
+a text file that will become our *Def file*.
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ mkdir def-file-build
+hcs7004@ubuntu:~$ cd def-file-build
+
+hcs7004@ubuntu:~$ nano multiqc_mini.def
+```
+
+<br/>
+
+To get started with the *Def file*, we'll define the starting image (base layer) --
+like in Section 6, we'll use the latest stable Ubuntu release.
+In *Def files*, we start with a *Header* that uses keywords to define the base operating system,
+with `Bootstrap:` indicating the registry and `From:` the base image.
+So, our `docker://ubuntu:20.04` label in the interactive build becomes:
+
+```{bash, eval=FALSE}
+Bootstrap: docker             # Enter these definition file lines in Nano!
+From: ubuntu:20.04 
+```
+
+<br/>
+
+The main content is broken up into optional predefined sections indicated with `%<section-name>`.
+The `%post` section is generally the most important;
+here, we can for example enter shell commands that perform software installation.
+
+```{bash, eval=FALSE}
+%post                         # (We're still in Nano!)
+    apt-get update            # Indent these lines with a tab
+    apt-get install -y python3-pip git
+    install git+https://github.com/ewels/MultiQC.git
+```
+
+It is important to add the `-y` option to `apt-get install` in this case,
+since building the container happens non-interactively and we wouldn't be able to answer a prompt. 
+
+<br/>
+
+From these few lines, we can already build a container!
+Save your changes in `nano` by pressing `Ctrl + O` and then exit by pressing `Ctrl + X`. 
+We'll use the `build` sub-command to build a container image from our *Def file*:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo singularity build multiqc_mini.sif multiqc_mini.def
+```
+
+<br/>
+
+We've built a container from scratch!
+Finally, let's test it:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ singularity exec multiqc_mini.sif multiqc --version
+```
+
+******
+<br/>
+
+# Appx. 4: Improving our *Def file*
+
+We'll now make a number of small improvements to our *Def file*, mostly in "best practice" fashion.
+
+Copy the initial *Def file* to a new file and open it in `Nano`:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ cp multiqc_mini.def multiqc_improved.def
+hcs7004@ubuntu:~$ nano multiqc_improved.def
+```
+
+First, we'll add two lines to our `%post` section, to clean up after installation,
+which may reduce the size of the resulting container image.
+
+```{bash, eval=FALSE}
+%post
+    apt-get update
+    apt-get install -y python3-pip git
+    apt-get clean all                   # Add this line
+    apt-get purge -y                    # Add this line
+    pip3 install git+https://github.com/ewels/MultiQC.git
+```
+
+<br/>
+
+Next, we'll add some metadata, so that other people who may get a hold of our container image file
+(for instance, after we share our image at a registry),
+will know what it does and who produced it.
+For this, we use the `%labels` section with a couple of keyword-value combinations,
+and the `%help` section with free-form text describing the container:
+
+```{bash, eval=FALSE}
+%labels
+    Author HCS7006
+    Version latest
+    
+%help
+    This container has MultiQC installed on top of ubuntu 20.04
+```
+
+<br/>
+
+Finally, we will add a default command that will be executed if we would run the
+resulting image with the `singularity run` sub-command.
+`multiqc --version` could be a useful command here:
+
+```{bash, eval=FALSE}
+%runscript
+    multiqc --version
+```
+
+<br/>
+
+Exit `nano` (`Ctrl + O` then `Ctrl + X`) and build and run the improved container image:
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ sudo singularity build multiqc_improved.sif multiqc_improved.def
+
+hcs7004@ubuntu:~$ singularity run multiqc_improved.sif
+```
+
+<br/>
+
+A useful section that we haven't used is `%files`,
+which can be used to copy files into the container.
+The [Singularity documentation on Def files](https://sylabs.io/guides/3.0/user-guide/definition_files.html)
+has information on these and even more possible sections.
+
+******
+<br/>
+
+# Appx. 5: Assigning variables
+
+In the section on `$PATH`, we saw a bit of variable assignment at the command line, but perhaps this did not become entirely clear.
+Let's look at it a bit more to clarify:
 
 ```{bash, eval=FALSE}
 hcs7004@ubuntu:~$ echo "My latest masterpiece" > book.txt   # First we create a mock file
@@ -460,17 +632,17 @@ hcs7004@ubuntu:~$ echo "My latest masterpiece" > book.txt   # First we create a 
 hcs7004@ubuntu:~$ recommended_book="book.txt"               # Assign using variable=value / variable = "value"
 
 hcs7004@ubuntu:~$ echo $recommended_book                    # Recall the variable using a "$"
-hcs7004@ubuntu:~$ cat $recommended_book                     # This will work too!
+hcs7004@ubuntu:~$ cat $recommended_book                     # This works too - it will display the file contents!
 ```
 
 ******
 <br/>
 
-# Appendix 4: Manual installation
+# Appx. 6: Manual installation
 
 <br/>
 
-## Installing `vcftools` manually
+## Install `vcftools` manually
 ```{bash, eval=FALSE}
 wget https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar # Download the archive
 tar -xvf vcftools.tar               # Unpack the archive
@@ -486,7 +658,7 @@ vcftools                            # Check if it's installed
 
 <br/>
 
-## Installing `bowtie2` manually
+## Install `bowtie2` manually
 ```{bash, eval=FALSE}
 git clone https://github.com/BenLangmead/bowtie2.git # Download using the git's clone sub-command
 cd bowtie2                          # Move into the dir
