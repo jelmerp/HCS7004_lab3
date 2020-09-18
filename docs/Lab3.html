@@ -567,7 +567,7 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>Another registry that hosts all Biocontainers is <a href="https://quay.io/">quay.io</a>, which provides the shorter, canonical notation for downloading the container, so we’ll use that one below. Additionally, we’ll use separate commands to download and run the container, so that we get the image file in our working directory:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1</span>
 <span id="cb12-2"><a href="#cb12-2"></a></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_1.9--py_1.sif</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_1.9--py_1.sif       <span class="co"># Run the downloaded .sif file</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="ex">Singularity</span><span class="op">&gt;</span></span></code></pre></div>
 <p>Apparently, the default run script was to enter a shell (i.e. a terminal) within the container, as indicated with the <code>Singularity&gt;</code> prompt. You should also see this prompt yourself, and it indicates that your are inside the container.</p>
 <p><br/></p>
