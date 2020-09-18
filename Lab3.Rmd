@@ -480,6 +480,7 @@ While we could now install `multiqc` directly, best practice is to maintain a se
 If `conda` complains, saying that your shell is not configured properly for `conda`, you need to run the following (as that long error message should also specify):
 ```{bash, eval=FALSE}
 [<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
+[<user>@owens-login01 ~]$ source ~/.bashrc
 ```
 This will run a `conda` setup shell script whenever you open a terminal (since `~/.bashrc` is always run when you open a terminal).
 

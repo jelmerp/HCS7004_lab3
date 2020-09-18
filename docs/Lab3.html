@@ -745,7 +745,8 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <li><code>multiqc</code> is the name of the package.</li>
 </ul>
 <p>If <code>conda</code> complains, saying that your shell is not configured properly for <code>conda</code>, you need to run the following (as that long error message should also specify):</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb36-2"><a href="#cb36-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ source ~/.bashrc</span></code></pre></div>
 <p>This will run a <code>conda</code> setup shell script whenever you open a terminal (since <code>~/.bashrc</code> is always run when you open a terminal).</p>
 <p><br/></p>
 <p>Now, we activate the <code>multiqc</code> environment and see if we can run it:</p>
