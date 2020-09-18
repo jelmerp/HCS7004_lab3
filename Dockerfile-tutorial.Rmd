@@ -1,0 +1,71 @@
+---
+title: "Dockerfile_tutorial.Rmd"
+author: "Jelmer Poelstra"
+date: "9/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Appendix 3: Creating a `Dockerfile`
+
+It is best practice to produce your *final* container image from a text file,
+namely a *Definition file* for `Singularity` images or a *Dockerfile* for `Docker` images.
+While it is fine to initially build things interactively like we did in Section 6, once
+that is done, you ideally reproduce the necessary commands in a text file.
+
+We will now write a *Dockerfile* for the `multiqc` container we created in Section 6.
+This may seem odd, since we have been working with `Singularity` rather than `Docker`.
+The reason we're doing this is because you're much more likely to encounter *Dockerfiles* in the wild,
+so understanding them is helpful.
+Case in point: searching online, I was able to find a [*Dockerfile*](https://hub.docker.com/r/ewels/multiqc/dockerfile) for `multiqc` but not a `Singularity` *Definition file*.
+In practice, when you need to create a new container, it is likely that you will be able to find
+a *Dockerfile* for a container that is similar but not exactly right, such that it pays off to know how to modify them.
+
+<br/>
+
+Let's start by creating and moving into a new directory, and then creating and opening
+a text file that we simply call "Dockerfile", which is the required name for *Dockerfiles*.
+
+```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ mkdir docker_container && cd docker_container
+
+hcs7004@ubuntu:~$ nano Dockerfile
+```
+The first command above also introduced a new operator, `&&`,
+which can be used to combine multiple commands on one line,
+and importantly, will only execute the second command if the first command executed successfully.
+
+<br/>
+
+To get started with the *Dockerfile*, we'll define the starting image (base layer) --
+like in Section 6, we'll use the latest stable Ubuntu release.
+In *Dockerfiles*, every line begins with an all-caps *directive* that indicates how to interpret the rest of the line.
+The first line of the *Dockerfile* must have a `FROM` directive that indicates the starting image: 
+```{bash, eval=FALSE}
+FROM ubuntu:20.04         # Enter all the Dockerfile "commands" in Nano, not on your terminal!
+```
+
+The meat of a `Dockerfile` is usually a series of shell commands that perform software installation,
+and the directive for these commands is `RUN`. As mentioned, every line needs to start with a directive,
+but we can continue on a single line, yet still keep separate commands clear by using `&&` and escaping newlines.
+
+```{bash, eval=FALSE}
+RUN apt-get update -qq && \
+    apt-get install -y python3-pip git && \
+    install git+https://github.com/ewels/MultiQC.git
+```
+
+We used the `qq` option to `apt-get update` for it to be "quiet",
+since we don't want too much boilerplate output when building the container.
+Also, it is important to add the `-y` option to `apt-get install` in this case,
+since building the container happens non-interactively and we wouldn't be able to answer a prompt. 
+
+From these two lines (`FROM` and `RUN`), we can already build a container!
+We'll use the `docker build` subcommand
+
+```{bash, eval=FALSE}
+sudo docker build -t multiqc:latest .
+```
