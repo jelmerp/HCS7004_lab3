@@ -479,7 +479,7 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>To permanently add a directory to <code>$PATH</code>, add it to your <code>~/.bashrc</code> file. How could we do this in a single line on the command line?</p>
 <details>
 <p><summary>Show answer</summary></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:/path/to/dir/lab3_containers/&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;PATH=</span><span class="va">$PATH</span><span class="st">:</span><span class="va">$HOME</span><span class="st">/lab3_containers/&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
 </details>
 <p><br/></p>
 <p>With the <code>which</code> command (or <code>whereis</code> for similar results), we can check where software that is available to the <code>$PATH</code> is located, since we can have many directories in it. Even commands like <code>grep</code> have executables, and they can simply be called by their name because these executables are in dirs in your <code>$PATH</code>:</p>
@@ -624,7 +624,7 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <span id="cb22-5"><a href="#cb22-5"></a><span class="ex">sftp</span><span class="op">&gt;</span> exit</span></code></pre></div>
 <p><br/></p>
 <p>Now, let’s move to OSC. You can either <code>ssh</code> in (<code>ssh &lt;username&gt;@owens.osc.edu</code>), or open a terminal in <a href="http://ondemand.osc.edu/">OnDemand</a>. Then, go the directory that you uploaded the container image file to:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ cd /fs/scratch/PAS1752/<span class="op">&lt;</span>username<span class="op">&gt;</span>/lab3_containers/</span>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ cd /fs/scratch/PAS1752/<span class="va">$USER</span>/lab3_containers/</span>
 <span id="cb23-2"><a href="#cb23-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls <span class="co"># You should see you container &quot;multiqc.sif&quot;</span></span></code></pre></div>
 <p><br/></p>
 <p><code>Singularity</code> is installed at OSC, but it does need to be loaded first:</p>
@@ -676,14 +676,19 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 </div>
 <div id="really-running-our-container" class="section level1">
 <h1><span class="header-section-number">9</span> <em>Really</em> running our container</h1>
+<p>Start by making sure you have the <code>singularity</code> module loaded and are in the right directory:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load singularity</span>
+<span id="cb28-2"><a href="#cb28-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ cd /fs/scratch/PAS1752/jelmer/lab3_containers/    <span class="co"># Or your own dir if you copied the .sif file</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls                                                <span class="co"># You should see &quot;multiqc.sif&quot;</span></span></code></pre></div>
+<p><br/></p>
 <p>Now we are ready to run <code>multiqc</code> with some actual data. What <code>multiqc</code> does is summarize individual-level QC results from other programs such as <code>fastqc</code>. Therefore, its input can be a number of <code>fastqc</code> output files. I have put some of those in <code>/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</code>. Let’s see:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls /fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls /fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span></code></pre></div>
 <p><br/></p>
 <p>Since <code>/fs/ess/</code> happens <em>not</em> to be bind-mounted by default, we will need to do this manually. Otherwise, to run <code>multiqc</code>, all we need to do is specify the directory with files to analyze:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ fastqc_dir=/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span>
-<span id="cb29-2"><a href="#cb29-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity exec -B <span class="va">$fastqc_dir</span> multiqc.sif multiqc <span class="va">$fastqc_dir</span></span>
-<span id="cb29-3"><a href="#cb29-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls</span></code></pre></div>
-<p>Why did we create a variable <code>fastqc_dir</code> first?</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ fastqc_dir=/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files</span>
+<span id="cb30-2"><a href="#cb30-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ singularity exec -B <span class="va">$fastqc_dir</span> multiqc.sif multiqc <span class="va">$fastqc_dir</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ ls</span></code></pre></div>
+<p>Why did we create a variable <code>$fastqc_dir</code> first?</p>
 <p><br/></p>
 <p>Now we have performed an actual analysis using a container!</p>
 <hr />
@@ -694,10 +699,10 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>Let’s create a <code>conda</code> environment with <code>multiqc</code> installed.</p>
 <p><br/></p>
 <p>First, we need to load the appropriate module at OSC:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
 <p><br/></p>
 <p>While we could now install <code>multiqc</code> directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new <code>conda</code> environment (that we will simply name <code>multiqc</code>) and install <code>multiqc</code> in it:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
 <ul>
 <li><code>create</code> is the <code>conda</code> sub-command to create a new environment.</li>
 <li><code>-y</code> avoids a confirmation prompt.</li>
@@ -706,12 +711,12 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <li><code>multiqc</code> is the name of the package.</li>
 </ul>
 <p>If <code>conda</code> complains, saying that your shell is not configured properly for <code>conda</code>, you need to run the following (as that long error message should also specify):</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
 <p>This will run a <code>conda</code> setup shell script whenever you open a terminal (since <code>~/.bashrc</code> is always run when you open a terminal).</p>
 <p><br/></p>
 <p>Now, we activate the <code>multiqc</code> environment and see if we can run it:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">(</span><span class="ex">multiqc</span><span class="kw">)</span> [<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ multiqc --help <span class="co"># The prompt indicates your conda environment!</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="kw">(</span><span class="ex">multiqc</span><span class="kw">)</span> [<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ multiqc --help <span class="co"># The prompt indicates your conda environment!</span></span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
@@ -724,20 +729,20 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <li><code>module spider</code> will list all modules that could potentially be loaded, and you can also add a search term to narrow down the results.</li>
 </ul>
 <p>Let’s compare:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around; and check which versions of R you see</span></span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
-<span id="cb34-4"><a href="#cb34-4"></a></span>
-<span id="cb34-5"><a href="#cb34-5"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Narrow down to R immediately</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around; and check which versions of R you see</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a></span>
+<span id="cb35-5"><a href="#cb35-5"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Narrow down to R immediately</span></span></code></pre></div>
 <p>Were the available versions of R different between the <code>module avail</code> and <code>module spider</code> commands?</p>
 <p><br/></p>
 <p>Now, let’s load <code>R</code> without specifying a version:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R</span></code></pre></div>
 <p>Which version of <code>R</code> was loaded?</p>
 <p><br/></p>
 <p>But we heard lots of good things about the latest version of R, so we’ll load that instead:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R             <span class="co"># First unload the default R version</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  </span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R             <span class="co"># First unload the default R version</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  </span></code></pre></div>
 <p>What happened when we did this, besides the switch of the <code>R</code> version?</p>
 <hr />
 <p><br/></p>
@@ -747,27 +752,27 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>It is best practice to produce your <em>final</em> container image from a text file containing the recipe for the build, namely a <em>Definition file</em> when creating a <code>Singularity</code> image, or a <em>Dockerfile</em> when creating a <code>Docker</code> image. While it is fine to initially build things interactively like we did in Section 6, once that is done, the next step is to write a recipe file. Understanding these files will also help you when you find a container image (and its recipe file) that is similar to what you want but not exactly right, so you can quickly edit it.</p>
 <p><br/></p>
 <p>Now, we’ll create <code>Singularity</code> <em>Definition file</em> (<em>Def file</em> for short) for the container that we built interactively in Section 6. Let’s start by creating and moving into a new directory, and then creating and opening a text file that will become our <em>Def file</em>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir def-file-build</span>
-<span id="cb37-2"><a href="#cb37-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd def-file-build</span>
-<span id="cb37-3"><a href="#cb37-3"></a></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_mini.def</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir def-file-build</span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd def-file-build</span>
+<span id="cb38-3"><a href="#cb38-3"></a></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_mini.def</span></code></pre></div>
 <p><br/></p>
 <p>To get started with the <em>Def file</em>, we’ll define the starting image (base layer) – like in Section 6, we’ll use the latest stable Ubuntu release. In <em>Def files</em>, we start with a <em>Header</em> that uses keywords to define the base operating system, with <code>Bootstrap:</code> indicating the registry and <code>From:</code> the base image. So, our <code>docker://ubuntu:20.04</code> label in the interactive build becomes:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1"></a><span class="ex">Bootstrap</span>: docker             <span class="co"># Enter these definition file lines in Nano!</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="ex">From</span>: ubuntu:20.04 </span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1"></a><span class="ex">Bootstrap</span>: docker             <span class="co"># Enter these definition file lines in Nano!</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="ex">From</span>: ubuntu:20.04 </span></code></pre></div>
 <p><br/></p>
 <p>The main content is broken up into optional predefined sections indicated with <code>%&lt;section-name&gt;</code>. The <code>%post</code> section is generally the most important; here, we can for example enter shell commands that perform software installation.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1"></a><span class="ex">%post</span>                         <span class="co"># (We&#39;re still in Nano!)</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a>    <span class="ex">apt-get</span> update            <span class="co"># Indent these lines with a tab</span></span>
-<span id="cb39-3"><a href="#cb39-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
-<span id="cb39-4"><a href="#cb39-4"></a>    <span class="fu">install</span> git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1"></a><span class="ex">%post</span>                         <span class="co"># (We&#39;re still in Nano!)</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>    <span class="ex">apt-get</span> update            <span class="co"># Indent these lines with a tab</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
+<span id="cb40-4"><a href="#cb40-4"></a>    <span class="ex">pip3</span> install git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
 <p>It is important to add the <code>-y</code> option to <code>apt-get install</code> in this case, since building the container happens non-interactively and we wouldn’t be able to answer a prompt.</p>
 <p><br/></p>
-<p>From these few lines, we can already build a container! Save your changes in <code>nano</code> by pressing <code>Ctrl + O</code> and then exit by pressing <code>Ctrl + X</code>. We’ll use the <code>build</code> sub-command to build a container image from our <em>Def file</em>:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_mini.sif multiqc_mini.def</span></code></pre></div>
+<p>From these few lines, we can already build a container! Save your changes in <code>nano</code> by pressing <code>Ctrl + O</code> (and <code>Enter</code> to confirm), and then exit by pressing <code>Ctrl + X</code>. We’ll use the <code>build</code> sub-command to build a container image from our <em>Def file</em>:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_mini.sif multiqc_mini.def</span></code></pre></div>
 <p><br/></p>
 <p>We’ve built a container from scratch! Finally, let’s test it:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity exec multiqc_mini.sif multiqc --version</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity exec multiqc_mini.sif multiqc --version</span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
@@ -775,32 +780,32 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <h1><span class="header-section-number">13</span> Appx. 4: Improving our <em>Def file</em></h1>
 <p>We’ll now make a number of small improvements to our <em>Def file</em>, mostly in “best practice” fashion.</p>
 <p>Copy the initial <em>Def file</em> to a new file and open it in <code>Nano</code>:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ cp multiqc_mini.def multiqc_improved.def</span>
-<span id="cb42-2"><a href="#cb42-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_improved.def</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ cp multiqc_mini.def multiqc_improved.def</span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ nano multiqc_improved.def</span></code></pre></div>
 <p>First, we’ll add two lines to our <code>%post</code> section, to clean up after installation, which may reduce the size of the resulting container image.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1"></a><span class="ex">%post</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a>    <span class="ex">apt-get</span> update</span>
-<span id="cb43-3"><a href="#cb43-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
-<span id="cb43-4"><a href="#cb43-4"></a>    <span class="ex">apt-get</span> clean all                   <span class="co"># Add this line</span></span>
-<span id="cb43-5"><a href="#cb43-5"></a>    <span class="ex">apt-get</span> purge -y                    <span class="co"># Add this line</span></span>
-<span id="cb43-6"><a href="#cb43-6"></a>    <span class="ex">pip3</span> install git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1"></a><span class="ex">%post</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>    <span class="ex">apt-get</span> update</span>
+<span id="cb44-3"><a href="#cb44-3"></a>    <span class="ex">apt-get</span> install -y python3-pip git</span>
+<span id="cb44-4"><a href="#cb44-4"></a>    <span class="ex">apt-get</span> clean all                   <span class="co"># Add this line</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a>    <span class="ex">apt-get</span> purge -y                    <span class="co"># Add this line</span></span>
+<span id="cb44-6"><a href="#cb44-6"></a>    <span class="ex">pip3</span> install git+https://github.com/ewels/MultiQC.git</span></code></pre></div>
 <p><br/></p>
 <p>Next, we’ll add some metadata, so that other people who may get a hold of our container image file (for instance, after we share our image at a registry), will know what it does and who produced it. For this, we use the <code>%labels</code> section with a couple of keyword-value combinations, and the <code>%help</code> section with free-form text describing the container:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1"></a><span class="ex">%labels</span></span>
-<span id="cb44-2"><a href="#cb44-2"></a>    <span class="ex">Author</span> HCS7006</span>
-<span id="cb44-3"><a href="#cb44-3"></a>    <span class="ex">Version</span> latest</span>
-<span id="cb44-4"><a href="#cb44-4"></a>    </span>
-<span id="cb44-5"><a href="#cb44-5"></a><span class="ex">%help</span></span>
-<span id="cb44-6"><a href="#cb44-6"></a>    <span class="ex">This</span> container has MultiQC installed on top of ubuntu 20.04</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1"></a><span class="ex">%labels</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>    <span class="ex">Author</span> HCS7006</span>
+<span id="cb45-3"><a href="#cb45-3"></a>    <span class="ex">Version</span> latest</span>
+<span id="cb45-4"><a href="#cb45-4"></a>    </span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="ex">%help</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a>    <span class="ex">This</span> container has MultiQC installed on top of ubuntu 20.04</span></code></pre></div>
 <p><br/></p>
 <p>Finally, we will add a default command that will be executed if we would run the resulting image with the <code>singularity run</code> sub-command. <code>multiqc --version</code> could be a useful command here:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1"></a><span class="ex">%runscript</span></span>
-<span id="cb45-2"><a href="#cb45-2"></a>    <span class="ex">multiqc</span> --version</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1"></a><span class="ex">%runscript</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>    <span class="ex">multiqc</span> --version</span></code></pre></div>
 <p><br/></p>
 <p>Exit <code>nano</code> (<code>Ctrl + O</code> then <code>Ctrl + X</code>) and build and run the improved container image:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_improved.sif multiqc_improved.def</span>
-<span id="cb46-2"><a href="#cb46-2"></a></span>
-<span id="cb46-3"><a href="#cb46-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_improved.sif</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build multiqc_improved.sif multiqc_improved.def</span>
+<span id="cb47-2"><a href="#cb47-2"></a></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_improved.sif</span></code></pre></div>
 <p><br/></p>
 <p>A useful section that we haven’t used is <code>%files</code>, which can be used to copy files into the container. The <a href="https://sylabs.io/guides/3.0/user-guide/definition_files.html">Singularity documentation on Def files</a> has information on these and even more possible sections.</p>
 <hr />
@@ -809,12 +814,12 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <div id="appx.-5-assigning-variables" class="section level1">
 <h1><span class="header-section-number">14</span> Appx. 5: Assigning variables</h1>
 <p>In the section on <code>$PATH</code>, we saw a bit of variable assignment at the command line, but perhaps this did not become entirely clear. Let’s look at it a bit more to clarify:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;My latest masterpiece&quot;</span> <span class="op">&gt;</span> book.txt   <span class="co"># First we create a mock file</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a></span>
-<span id="cb47-3"><a href="#cb47-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ recommended_book=<span class="st">&quot;book.txt&quot;</span>               <span class="co"># Assign using variable=value / variable = &quot;value&quot;</span></span>
-<span id="cb47-4"><a href="#cb47-4"></a></span>
-<span id="cb47-5"><a href="#cb47-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$recommended_book</span>                    <span class="co"># Recall the variable using a &quot;$&quot;</span></span>
-<span id="cb47-6"><a href="#cb47-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat <span class="va">$recommended_book</span>                     <span class="co"># This works too - it will display the file contents!</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="st">&quot;My latest masterpiece&quot;</span> <span class="op">&gt;</span> book.txt   <span class="co"># First we create a mock file</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ recommended_book=<span class="st">&quot;book.txt&quot;</span>               <span class="co"># Assign using variable=value / variable = &quot;value&quot;</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ echo <span class="va">$recommended_book</span>                    <span class="co"># Recall the variable using a &quot;$&quot;</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a><span class="ex">hcs7004@ubuntu</span>:~$ cat <span class="va">$recommended_book</span>                     <span class="co"># This works too - it will display the file contents!</span></span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
@@ -823,27 +828,27 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p><br/></p>
 <div id="install-vcftools-manually" class="section level2">
 <h2><span class="header-section-number">15.1</span> Install <code>vcftools</code> manually</h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">wget</span> https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar <span class="co"># Download the archive</span></span>
-<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">tar</span> -xvf vcftools.tar               <span class="co"># Unpack the archive</span></span>
-<span id="cb48-3"><a href="#cb48-3"></a><span class="bu">cd</span> vcftools-vcftools-581c231/       <span class="co"># Move into the dir that was created</span></span>
-<span id="cb48-4"><a href="#cb48-4"></a><span class="ex">./autogen.sh</span>                        <span class="co"># Run a script that will generate the configure script</span></span>
-<span id="cb48-5"><a href="#cb48-5"></a><span class="ex">./configure</span>                         <span class="co"># Run the configure script</span></span>
-<span id="cb48-6"><a href="#cb48-6"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
-<span id="cb48-7"><a href="#cb48-7"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
-<span id="cb48-8"><a href="#cb48-8"></a></span>
-<span id="cb48-9"><a href="#cb48-9"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the vcftools dir</span></span>
-<span id="cb48-10"><a href="#cb48-10"></a><span class="ex">vcftools</span>                            <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">wget</span> https://github.com/vcftools/vcftools/tarball/master -O vcftools.tar <span class="co"># Download the archive</span></span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="fu">tar</span> -xvf vcftools.tar               <span class="co"># Unpack the archive</span></span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="bu">cd</span> vcftools-vcftools-581c231/       <span class="co"># Move into the dir that was created</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a><span class="ex">./autogen.sh</span>                        <span class="co"># Run a script that will generate the configure script</span></span>
+<span id="cb49-5"><a href="#cb49-5"></a><span class="ex">./configure</span>                         <span class="co"># Run the configure script</span></span>
+<span id="cb49-6"><a href="#cb49-6"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb49-7"><a href="#cb49-7"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb49-8"><a href="#cb49-8"></a></span>
+<span id="cb49-9"><a href="#cb49-9"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the vcftools dir</span></span>
+<span id="cb49-10"><a href="#cb49-10"></a><span class="ex">vcftools</span>                            <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
 <p><br/></p>
 </div>
 <div id="install-bowtie2-manually" class="section level2">
 <h2><span class="header-section-number">15.2</span> Install <code>bowtie2</code> manually</h2>
-<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">git</span> clone https://github.com/BenLangmead/bowtie2.git <span class="co"># Download using the git&#39;s clone sub-command</span></span>
-<span id="cb49-2"><a href="#cb49-2"></a><span class="bu">cd</span> bowtie2                          <span class="co"># Move into the dir</span></span>
-<span id="cb49-3"><a href="#cb49-3"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
-<span id="cb49-4"><a href="#cb49-4"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
-<span id="cb49-5"><a href="#cb49-5"></a></span>
-<span id="cb49-6"><a href="#cb49-6"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the bowtie dir</span></span>
-<span id="cb49-7"><a href="#cb49-7"></a><span class="ex">bowtie2</span>                             <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">git</span> clone https://github.com/BenLangmead/bowtie2.git <span class="co"># Download using the git&#39;s clone sub-command</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a><span class="bu">cd</span> bowtie2                          <span class="co"># Move into the dir</span></span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="fu">make</span>                                <span class="co"># Compile the program</span></span>
+<span id="cb50-4"><a href="#cb50-4"></a><span class="fu">sudo</span> make install                   <span class="co"># Optional - copy the executables to your $PATH</span></span>
+<span id="cb50-5"><a href="#cb50-5"></a></span>
+<span id="cb50-6"><a href="#cb50-6"></a><span class="bu">cd</span> ..                               <span class="co"># Move out of the bowtie dir</span></span>
+<span id="cb50-7"><a href="#cb50-7"></a><span class="ex">bowtie2</span>                             <span class="co"># Check if it&#39;s installed</span></span></code></pre></div>
 </div>
 </div>
 

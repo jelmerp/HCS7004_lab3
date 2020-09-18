@@ -56,7 +56,7 @@ How could we do this in a single line on the command line?
 <details>
 <summary>Show answer</summary>
 ```{bash, eval=FALSE}
-hcs7004@ubuntu:~$ echo "$PATH:/path/to/dir/lab3_containers/" >> ~/.bashrc
+hcs7004@ubuntu:~$ echo "PATH=$PATH:$HOME/lab3_containers/" >> ~/.bashrc
 ```
 </details>
 <br/>
@@ -288,7 +288,7 @@ sftp> exit
 
 Now, let’s move to OSC. You can either `ssh` in (`ssh <username>@owens.osc.edu`), or open a terminal in [OnDemand](http://ondemand.osc.edu/). Then, go the directory that you uploaded the container image file to:
 ```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ cd /fs/scratch/PAS1752/<username>/lab3_containers/
+[<user>@owens-login01 ~]$ cd /fs/scratch/PAS1752/$USER/lab3_containers/
 [<user>@owens-login01 ~]$ ls # You should see you container "multiqc.sif"
 ```
 <br/>
@@ -364,6 +364,16 @@ By default, the path in the container will be the same as in the host, but this 
 
 # *Really* running our container
 
+Start by making sure you have the `singularity` module loaded and are in the right directory:
+
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module load singularity
+[<user>@owens-login01 ~]$ cd /fs/scratch/PAS1752/jelmer/lab3_containers/    # Or your own dir if you copied the .sif file
+[<user>@owens-login01 ~]$ ls                                                # You should see "multiqc.sif"
+```
+
+<br/>
+
 Now we are ready to run `multiqc` with some actual data. What `multiqc` does is summarize individual-level QC results from other programs such as `fastqc`. Therefore, its input can be a number of `fastqc` output files. I have put some of those in `/fs/ess/PAS1752/HCS7004_Files/Lab3/fastqc_files`. Let's see:
 
 ```{bash, eval=FALSE}
@@ -379,7 +389,7 @@ Since `/fs/ess/` happens *not* to be bind-mounted by default, we will need to do
 [<user>@owens-login01 ~]$ ls
 ```
 
-Why did we create a variable `fastqc_dir` first?
+Why did we create a variable `$fastqc_dir` first?
 
 <br/>
 
@@ -522,7 +532,7 @@ here, we can for example enter shell commands that perform software installation
 %post                         # (We're still in Nano!)
     apt-get update            # Indent these lines with a tab
     apt-get install -y python3-pip git
-    install git+https://github.com/ewels/MultiQC.git
+    pip3 install git+https://github.com/ewels/MultiQC.git
 ```
 
 It is important to add the `-y` option to `apt-get install` in this case,
@@ -531,7 +541,7 @@ since building the container happens non-interactively and we wouldn't be able t
 <br/>
 
 From these few lines, we can already build a container!
-Save your changes in `nano` by pressing `Ctrl + O` and then exit by pressing `Ctrl + X`. 
+Save your changes in `nano` by pressing `Ctrl + O` (and `Enter` to confirm), and then exit by pressing `Ctrl + X`. 
 We'll use the `build` sub-command to build a container image from our *Def file*:
 
 ```{bash, eval=FALSE}
