@@ -105,8 +105,12 @@ Since the installation of Singularity involves relatively many steps, we’ll us
 
 We download the script with installation instructions:
 ```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ mkdir $HOME/lab3_containers/singularity_install
+hcs7004@ubuntu:~$ cd $HOME/lab3_containers/singularity_install
+
 hcs7004@ubuntu:~$ wget http://bit.ly/HCS7004 -O installing_singularity.sh
 hcs7004@ubuntu:~$ ls
+
 hcs7004@ubuntu:~$ chmod u+x installing_singularity.sh     # This will make the script executable
 hcs7004@ubuntu:~$ ls                                      # Note the change in color!
 ```
@@ -135,12 +139,12 @@ Now, we’ll run the script:
 ```{bash, eval=FALSE}
 hcs7004@ubuntu:~$ ./installing_singularity.sh
 ```
-(If you get errors, try to figure out at which line those occurred. We'll try to rerun line-by-line from there onwards, in that case.)
 
 <br/>
 
 Let’s check whether `Singularity` was successfully installed:
 ```{bash, eval=FALSE}
+hcs7004@ubuntu:~$ cd $HOME/lab3_containers
 hcs7004@ubuntu:~$ singularity
 ```
 
@@ -188,7 +192,9 @@ How could we check whether `multiqc` is installed?
 ```{bash, eval=FALSE}
 Singularity> multiqc
 
-Singularity> multiqc --help
+Singularity> multiqc --help       # Commonly available option for a lot of software
+
+Singularity> multiqc --version    # Idem
 ```
 </details>
 <br/>
@@ -197,7 +203,8 @@ In most cases, it would be a bit more practical to first just download the conta
 
 <br/>
 
-Which version of `multiqc` did we just download? Which other versions are available? How would we download one of those?
+Which version of `multiqc` did we just download?
+Which other versions are available, and how would we download one of those?
 
 ******
 <br/>
@@ -398,48 +405,7 @@ Now we have performed an actual analysis using a container!
 ******
 <br/>
 
-# Appx. 1: Using `conda` at OSC
-
-Let's create a `conda` environment with `multiqc` installed.
-
-<br/>
-
-First, we need to load the appropriate module at OSC: 
-```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ module load python/3.6-conda5.2 # (conda is associated with Python)
-```
-<br/>
-
-While we could now install `multiqc` directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new `conda` environment (that we will simply name `multiqc`) and install `multiqc` in it:
-```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc # This will take a while
-```
-
-- `create` is the `conda` sub-command to create a new environment.
-- `-y` avoids a confirmation prompt.
-- `-n multiqc` is the name for the new environment.
-- `-c bioconda` is the `conda` "channel" we download from.
-- `multiqc` is the name of the package.
-
-If `conda` complains, saying that your shell is not configured properly for `conda`, you need to run the following (as that long error message should also specify):
-```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
-```
-This will run a `conda` setup shell script whenever you open a terminal (since `~/.bashrc` is always run when you open a terminal).
-
-<br/>
-
-Now, we activate the `multiqc` environment and see if we can run it: 
-```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ conda activate multiqc
-(multiqc) [<user>@owens-login01 ~]$ multiqc --help # The prompt indicates your conda environment!
-```
-
-
-******
-<br/>
-
-# Appx. 2: More `module`
+# Appx. 1: More `module`
 
 Logged in at OSC, we'll try some `module` commands for loading and unloading software.
 
@@ -480,6 +446,46 @@ But we heard lots of good things about the latest version of R, so we'll load th
 
 What happened when we did this, besides the switch of the `R` version?
 
+
+******
+<br/>
+
+# Appx. 2: Using `conda` at OSC
+
+Let's create a `conda` environment with `multiqc` installed.
+
+<br/>
+
+First, we need to load the appropriate module at OSC: 
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ module load python/3.6-conda5.2 # (conda is associated with Python)
+```
+<br/>
+
+While we could now install `multiqc` directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new `conda` environment (that we will simply name `multiqc`) and install `multiqc` in it:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc # This will take a while
+```
+
+- `create` is the `conda` sub-command to create a new environment.
+- `-y` avoids a confirmation prompt.
+- `-n multiqc` is the name for the new environment.
+- `-c bioconda` is the `conda` "channel" we download from.
+- `multiqc` is the name of the package.
+
+If `conda` complains, saying that your shell is not configured properly for `conda`, you need to run the following (as that long error message should also specify):
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
+```
+This will run a `conda` setup shell script whenever you open a terminal (since `~/.bashrc` is always run when you open a terminal).
+
+<br/>
+
+Now, we activate the `multiqc` environment and see if we can run it: 
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ conda activate multiqc
+(multiqc) [<user>@owens-login01 ~]$ multiqc --help    # The prompt shows your conda environment!
+```
 
 ******
 <br/>

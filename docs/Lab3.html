@@ -512,10 +512,14 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>Since the installation of Singularity involves relatively many steps, we’ll use the shell script <code>installing_singularity.sh</code>. Like any shell script, it is simply a collection of shell commands. In other words, you could also enter these commands one-by-one on the command line. These commands were taken from the <a href="https://sylabs.io/guides/3.5/user-guide/quick_start.html#quick-installation-steps">Singularity installation instructions</a>, so there is no magic here.</p>
 <p><br/></p>
 <p>We download the script with installation instructions:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ wget http://bit.ly/HCS7004 -O installing_singularity.sh</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ chmod u+x installing_singularity.sh     <span class="co"># This will make the script executable</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls                                      <span class="co"># Note the change in color!</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir <span class="va">$HOME</span>/lab3_containers/singularity_install</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd <span class="va">$HOME</span>/lab3_containers/singularity_install</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="ex">hcs7004@ubuntu</span>:~$ wget http://bit.ly/HCS7004 -O installing_singularity.sh</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="ex">hcs7004@ubuntu</span>:~$ chmod u+x installing_singularity.sh     <span class="co"># This will make the script executable</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="ex">hcs7004@ubuntu</span>:~$ ls                                      <span class="co"># Note the change in color!</span></span></code></pre></div>
 <p><br/></p>
 <p>Have a look at the script to get an idea of what’s being done there. How do we do that again?</p>
 <details>
@@ -533,10 +537,10 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p><br/></p>
 <p>Now, we’ll run the script:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ ./installing_singularity.sh</span></code></pre></div>
-<p>(If you get errors, try to figure out at which line those occurred. We’ll try to rerun line-by-line from there onwards, in that case.)</p>
 <p><br/></p>
 <p>Let’s check whether <code>Singularity</code> was successfully installed:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ cd <span class="va">$HOME</span>/lab3_containers</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity</span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
@@ -569,12 +573,14 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p><summary>Show answer</summary></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc</span>
 <span id="cb13-2"><a href="#cb13-2"></a></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --help</span></code></pre></div>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --help       <span class="co"># Commonly available option for a lot of software</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --version    <span class="co"># Idem</span></span></code></pre></div>
 </details>
 <p><br/></p>
 <p>In most cases, it would be a bit more practical to first just download the container image using <code>singularity pull &lt;image-ID&gt;</code>. (Another side note is that the “address” to the container provided here is not the canonical form, I’m not sure why Biocontainers does this. The same container is also hosted at <a href="https://quay.io/">quay.io</a>, from which it can be downloaded using <code>singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1</code>.)</p>
 <p><br/></p>
-<p>Which version of <code>multiqc</code> did we just download? Which other versions are available? How would we download one of those?</p>
+<p>Which version of <code>multiqc</code> did we just download? Which other versions are available, and how would we download one of those?</p>
 <hr />
 <p><br/></p>
 </div>
@@ -694,15 +700,42 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <hr />
 <p><br/></p>
 </div>
-<div id="appx.-1-using-conda-at-osc" class="section level1">
-<h1><span class="header-section-number">10</span> Appx. 1: Using <code>conda</code> at OSC</h1>
+<div id="appx.-1-more-module" class="section level1">
+<h1><span class="header-section-number">10</span> Appx. 1: More <code>module</code></h1>
+<p>Logged in at OSC, we’ll try some <code>module</code> commands for loading and unloading software.</p>
+<p>First, let’s explore the modules (software) that are available.</p>
+<ul>
+<li><code>module avail</code> will list all the modules that can be directly loaded, given the current environment.</li>
+<li><code>module spider</code> will list all modules that could potentially be loaded, and you can also add a search term to narrow down the results.</li>
+</ul>
+<p>Let’s compare:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around; and check which versions of R you see</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a></span>
+<span id="cb31-3"><a href="#cb31-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a></span>
+<span id="cb31-5"><a href="#cb31-5"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Narrow down to R immediately</span></span></code></pre></div>
+<p>Were the available versions of R different between the <code>module avail</code> and <code>module spider</code> commands?</p>
+<p><br/></p>
+<p>Now, let’s load <code>R</code> without specifying a version:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R</span></code></pre></div>
+<p>Which version of <code>R</code> was loaded?</p>
+<p><br/></p>
+<p>But we heard lots of good things about the latest version of R, so we’ll load that instead:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R             <span class="co"># First unload the default R version</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  </span></code></pre></div>
+<p>What happened when we did this, besides the switch of the <code>R</code> version?</p>
+<hr />
+<p><br/></p>
+</div>
+<div id="appx.-2-using-conda-at-osc" class="section level1">
+<h1><span class="header-section-number">11</span> Appx. 2: Using <code>conda</code> at OSC</h1>
 <p>Let’s create a <code>conda</code> environment with <code>multiqc</code> installed.</p>
 <p><br/></p>
 <p>First, we need to load the appropriate module at OSC:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
 <p><br/></p>
 <p>While we could now install <code>multiqc</code> directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new <code>conda</code> environment (that we will simply name <code>multiqc</code>) and install <code>multiqc</code> in it:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
 <ul>
 <li><code>create</code> is the <code>conda</code> sub-command to create a new environment.</li>
 <li><code>-y</code> avoids a confirmation prompt.</li>
@@ -711,39 +744,12 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <li><code>multiqc</code> is the name of the package.</li>
 </ul>
 <p>If <code>conda</code> complains, saying that your shell is not configured properly for <code>conda</code>, you need to run the following (as that long error message should also specify):</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
 <p>This will run a <code>conda</code> setup shell script whenever you open a terminal (since <code>~/.bashrc</code> is always run when you open a terminal).</p>
 <p><br/></p>
 <p>Now, we activate the <code>multiqc</code> environment and see if we can run it:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
-<span id="cb34-2"><a href="#cb34-2"></a><span class="kw">(</span><span class="ex">multiqc</span><span class="kw">)</span> [<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ multiqc --help <span class="co"># The prompt indicates your conda environment!</span></span></code></pre></div>
-<hr />
-<p><br/></p>
-</div>
-<div id="appx.-2-more-module" class="section level1">
-<h1><span class="header-section-number">11</span> Appx. 2: More <code>module</code></h1>
-<p>Logged in at OSC, we’ll try some <code>module</code> commands for loading and unloading software.</p>
-<p>First, let’s explore the modules (software) that are available.</p>
-<ul>
-<li><code>module avail</code> will list all the modules that can be directly loaded, given the current environment.</li>
-<li><code>module spider</code> will list all modules that could potentially be loaded, and you can also add a search term to narrow down the results.</li>
-</ul>
-<p>Let’s compare:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module avail        <span class="co"># Look around; and check which versions of R you see</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a></span>
-<span id="cb35-3"><a href="#cb35-3"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider       <span class="co"># Idem as above</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a></span>
-<span id="cb35-5"><a href="#cb35-5"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module spider R     <span class="co"># Narrow down to R immediately</span></span></code></pre></div>
-<p>Were the available versions of R different between the <code>module avail</code> and <code>module spider</code> commands?</p>
-<p><br/></p>
-<p>Now, let’s load <code>R</code> without specifying a version:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R</span></code></pre></div>
-<p>Which version of <code>R</code> was loaded?</p>
-<p><br/></p>
-<p>But we heard lots of good things about the latest version of R, so we’ll load that instead:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module unload R             <span class="co"># First unload the default R version</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load R/4.0.2-gnu9.1  </span></code></pre></div>
-<p>What happened when we did this, besides the switch of the <code>R</code> version?</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="kw">(</span><span class="ex">multiqc</span><span class="kw">)</span> [<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ multiqc --help    <span class="co"># The prompt shows your conda environment!</span></span></code></pre></div>
 <hr />
 <p><br/></p>
 </div>
