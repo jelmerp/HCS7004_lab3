@@ -466,6 +466,14 @@ First, we need to load the appropriate module at OSC:
 ```
 <br/>
 
+We also need to do some one-time set-up for `conda`, by adding a script to our `~/.bashrc`:
+```{bash, eval=FALSE}
+[<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
+[<user>@owens-login01 ~]$ source ~/.bashrc
+```
+
+<br/>
+
 While we could now install `multiqc` directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new `conda` environment (that we will simply name `multiqc`) and install `multiqc` in it:
 ```{bash, eval=FALSE}
 [<user>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc # This will take a while
@@ -476,13 +484,6 @@ While we could now install `multiqc` directly, best practice is to maintain a se
 - `-n multiqc` is the name for the new environment.
 - `-c bioconda` is the `conda` "channel" we download from.
 - `multiqc` is the name of the package.
-
-If `conda` complains, saying that your shell is not configured properly for `conda`, you need to run the following (as that long error message should also specify):
-```{bash, eval=FALSE}
-[<user>@owens-login01 ~]$ echo ". /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
-[<user>@owens-login01 ~]$ source ~/.bashrc
-```
-This will run a `conda` setup shell script whenever you open a terminal (since `~/.bashrc` is always run when you open a terminal).
 
 <br/>
 

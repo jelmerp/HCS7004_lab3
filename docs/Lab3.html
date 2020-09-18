@@ -735,8 +735,12 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <p>First, we need to load the appropriate module at OSC:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ module load python/3.6-conda5.2 <span class="co"># (conda is associated with Python)</span></span></code></pre></div>
 <p><br/></p>
+<p>We also need to do some one-time set-up for <code>conda</code>, by adding a script to our <code>~/.bashrc</code>:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb35-2"><a href="#cb35-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ source ~/.bashrc</span></code></pre></div>
+<p><br/></p>
 <p>While we could now install <code>multiqc</code> directly, best practice is to maintain a separate environment for each piece of software (why?). Therefore, we will all at once create a new <code>conda</code> environment (that we will simply name <code>multiqc</code>) and install <code>multiqc</code> in it:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda create -y -n multiqc -c bioconda multiqc <span class="co"># This will take a while</span></span></code></pre></div>
 <ul>
 <li><code>create</code> is the <code>conda</code> sub-command to create a new environment.</li>
 <li><code>-y</code> avoids a confirmation prompt.</li>
@@ -744,10 +748,6 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <li><code>-c bioconda</code> is the <code>conda</code> “channel” we download from.</li>
 <li><code>multiqc</code> is the name of the package.</li>
 </ul>
-<p>If <code>conda</code> complains, saying that your shell is not configured properly for <code>conda</code>, you need to run the following (as that long error message should also specify):</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ echo <span class="st">&quot;. /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
-<span id="cb36-2"><a href="#cb36-2"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ source ~/.bashrc</span></code></pre></div>
-<p>This will run a <code>conda</code> setup shell script whenever you open a terminal (since <code>~/.bashrc</code> is always run when you open a terminal).</p>
 <p><br/></p>
 <p>Now, we activate the <code>multiqc</code> environment and see if we can run it:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a>[<span class="op">&lt;</span><span class="ex">user</span><span class="op">&gt;</span>@owens-login01 ~]$ conda activate multiqc</span>
