@@ -185,7 +185,7 @@ Additionally, we'll use separate commands to download and run the container, so 
 ```{bash, eval=FALSE}
 hcs7004@ubuntu:~$ singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1
 
-hcs7004@ubuntu:~$ singularity run multiqc_1.9--py_1.sif
+hcs7004@ubuntu:~$ singularity run multiqc_1.9--py_1.sif       # Run the downloaded .sif file
 Singularity>
 ```
 
