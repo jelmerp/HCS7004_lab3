@@ -563,9 +563,12 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 </div>
 <div id="downloading-and-running-a-multiqc-container" class="section level1">
 <h1><span class="header-section-number">5</span> Downloading and running a <code>multiqc</code> container</h1>
-<p>At <a href="https://biocontainers.pro/#/tools/multiqc">multiqc’s Biocontainers page</a>, we find the following instructions for Singularity, which will download and run the container:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="ex">Singularity</span><span class="op">&gt;</span></span></code></pre></div>
+<p>At <a href="https://biocontainers.pro/#/tools/multiqc">multiqc’s Biocontainers page</a>, we find the following instructions for Singularity, which will download and run the container: <code>singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0</code>.</p>
+<p>Another registry that hosts all Biocontainers is <a href="https://quay.io/">quay.io</a>, which provides the shorter, canonical notation for downloading the container, so we’ll use that one below. Additionally, we’ll use separate commands to download and run the container, so that we get the image file in our working directory:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="ex">hcs7004@ubuntu</span>:~$ singularity run multiqc_1.9--py_1.sif</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="ex">Singularity</span><span class="op">&gt;</span></span></code></pre></div>
 <p>Apparently, the default run script was to enter a shell (i.e. a terminal) within the container, as indicated with the <code>Singularity&gt;</code> prompt. You should also see this prompt yourself, and it indicates that your are inside the container.</p>
 <p><br/></p>
 <p>How could we check whether <code>multiqc</code> is installed?</p>
@@ -578,8 +581,6 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <span id="cb13-5"><a href="#cb13-5"></a><span class="ex">Singularity</span><span class="op">&gt;</span> multiqc --version    <span class="co"># Idem</span></span></code></pre></div>
 </details>
 <p><br/></p>
-<p>In most cases, it would be a bit more practical to first just download the container image using <code>singularity pull &lt;image-ID&gt;</code>. (Another side note is that the “address” to the container provided here is not the canonical form, I’m not sure why Biocontainers does this. The same container is also hosted at <a href="https://quay.io/">quay.io</a>, from which it can be downloaded using <code>singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1</code>.)</p>
-<p><br/></p>
 <p>Which version of <code>multiqc</code> did we just download? Which other versions are available, and how would we download one of those?</p>
 <hr />
 <p><br/></p>
@@ -588,8 +589,8 @@ Here, I used <code>$HOME</code> instead of <code>/home/&lt;my-user-name&gt;</cod
 <h1><span class="header-section-number">6</span> Building our own container</h1>
 <p>To practice, we’ll now build our own <code>Singularity</code> container with <code>multiqc.</code> Recall that you need <code>sudo</code> privileges to build a container, so we’ll do this on our own computer/Virtualbox.</p>
 <p><br/></p>
-<p>First, create a directory for the container (within the <code>lab3_containers/</code> dir):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir multiqc</span></code></pre></div>
+<p>First, create a directory for the container (within the dir):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ mkdir multiqc       <span class="co"># Full path should be $HOME/lab3_containers/multiqc</span></span></code></pre></div>
 <p><br/></p>
 <p>We will now create a special type of container image that allows for interactive modification using the <code>--sandbox</code> option, with <code>multiqc/</code> being the target directory (which will be created) and <code>docker://ubuntu:20.04</code> being the base image.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">hcs7004@ubuntu</span>:~$ sudo singularity build --sandbox multiqc/ docker://ubuntu:20.04</span></code></pre></div>

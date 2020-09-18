@@ -176,8 +176,16 @@ The [tool page](https://biocontainers.pro/#/tools/multiqc) that you should have 
 # Downloading and running a `multiqc` container
 
 At [multiqc's Biocontainers page](https://biocontainers.pro/#/tools/multiqc), we find the following instructions for Singularity, which will download and run the container:
+`singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0`.
+
+Another registry that hosts all Biocontainers is [quay.io](https://quay.io/), which provides the shorter, canonical notation
+for downloading the container, so we'll use that one below.
+Additionally, we'll use separate commands to download and run the container, so that we get the image file in our working directory:
+
 ```{bash, eval=FALSE}
-hcs7004@ubuntu:~$ singularity run https://depot.galaxyproject.org/singularity/multiqc:1.9--pyh9f0ad1d_0
+hcs7004@ubuntu:~$ singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1
+
+hcs7004@ubuntu:~$ singularity run multiqc_1.9--py_1.sif
 Singularity>
 ```
 
@@ -199,10 +207,6 @@ Singularity> multiqc --version    # Idem
 </details>
 <br/>
 
-In most cases, it would be a bit more practical to first just download the container image using `singularity pull <image-ID>`. (Another side note is that the "address" to the container provided here is not the canonical form, I'm not sure why Biocontainers does this. The same container is also hosted at [quay.io](https://quay.io/), from which it can be downloaded using `singularity pull docker://quay.io/biocontainers/multiqc:1.9--py_1`.)
-
-<br/>
-
 Which version of `multiqc` did we just download?
 Which other versions are available, and how would we download one of those?
 
@@ -215,9 +219,9 @@ To practice, we’ll now build our own `Singularity` container with `multiqc.` R
 
 <br/>
 
-First, create a directory for the container (within the `lab3_containers/` dir):
+First, create a directory for the container (within the dir):
 ```{bash, eval=FALSE}
-hcs7004@ubuntu:~$ mkdir multiqc
+hcs7004@ubuntu:~$ mkdir multiqc       # Full path should be $HOME/lab3_containers/multiqc
 ```
 <br/>
 
